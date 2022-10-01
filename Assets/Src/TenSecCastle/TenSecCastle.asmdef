@@ -1,0 +1,18 @@
+{
+    "name": "TenSecCastle",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d7b861ae110bd4299b524eca2e896853",
+        "GUID:968f4c40ec17f492fb164b26d7f9efdc",
+        "GUID:d8b63aba1907145bea998dd612889d6b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
