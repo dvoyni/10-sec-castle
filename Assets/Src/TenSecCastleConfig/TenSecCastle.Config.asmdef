@@ -1,0 +1,16 @@
+{
+    "name": "TenSecCastle.Config",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d7b861ae110bd4299b524eca2e896853"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
