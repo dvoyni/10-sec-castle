@@ -31,17 +31,13 @@ namespace TenSecCastle.Game {
                             Debug.Log("hit castle");
                             unit.State = UnitState.Dieing;
                             unit.StateTime = 0;
+                            unit.StateProgress = 0;
                         }
                         else if (FindTarget(*model, unit).Test(out var target)) {
                             unit.State = UnitState.Attacking;
                             unit.StateTime = 0;
+                            unit.StateProgress = 0;
                             unit.TargetUnitId = target.Id;
-                            target.HitPoints -= CalculateDamage(unit, target);
-                            if (target.HitPoints <= 0) {
-                                target.HitPoints = 0;
-                                target.State = UnitState.Dieing;
-                                target.StateTime = 0;
-                            }
                         }
                         else if (FindCellToMove(*model, unit).Test(out var cell)) {
                             unit.State = UnitState.Moving;
@@ -58,6 +54,8 @@ namespace TenSecCastle.Game {
                         unit.StateProgress = unit.StateTime / len;
                         if (unit.StateTime >= len) {
                             unit.State = UnitState.Idle;
+                            unit.StateTime = 0;
+                            unit.StateProgress = 0;
                         }
                         break;
                     }
@@ -67,6 +65,8 @@ namespace TenSecCastle.Game {
                         unit.StateProgress = unit.StateTime / len;
                         if (unit.StateTime >= len) {
                             unit.State = UnitState.Idle;
+                            unit.StateTime = 0;
+                            unit.StateProgress = 0;
                         }
                         break;
                     }
@@ -80,7 +80,32 @@ namespace TenSecCastle.Game {
                 return Maybe<Unit>.Just(unit);
             }
 
+            static bool WithId(Unit unit, ulong* id) {
+                return unit.Id == *id;
+            }
+
             model.Units = model.Units.FilterMap(Cf.New<Unit, GameModel, float, Maybe<Unit>>(&UpdateUnit, model, dt));
+
+            for (var i = 0; i < model.Units.Length(); i++) {
+                if (model.Units.At(i).Test(out var unit)) {
+                    if ((unit.State == UnitState.Attacking) && (unit.StateTime == 0)) {
+                        if (
+                            model.Units
+                                    .FindIndex(Cf.New<Unit, ulong, bool>(&WithId, unit.TargetUnitId))
+                                    .Test(out var targetIndex)
+                            && model.Units.At(targetIndex).Test(out var target)
+                        ) {
+                            target.HitPoints -= CalculateDamage(unit, target);
+                            if (target.HitPoints <= 0) {
+                                target.HitPoints = 0;
+                                target.State = UnitState.Dieing;
+                                target.StateTime = 0;
+                            }
+                            model.Units = model.Units.Replace(targetIndex, target);
+                        }
+                    }
+                }
+            }
             return model;
         }
 
@@ -107,26 +132,56 @@ namespace TenSecCastle.Game {
             return model.Units.First(Cf.New<Unit, int2, bool>(&CellEq, cell));
         }
 
-        private static Maybe<Unit> FindTarget(GameModel model, Unit value) {
+        private static readonly int2[] _meleeCheckDelta = {
+                new(-1, 0), new(0, -1), new(0, 1), new(1, 0),
+                new(-1, -1), new(-1, 1), new(1, -1), new(1, 1),
+        };
+
+        private static readonly int2[] _rangedCheckDelta = {
+                new(-1, 0), new(0, -1), new(0, 1), new(1, 0),
+                new(-1, -1), new(-1, 1), new(1, -1), new(1, 1),
+
+                new(-2, 0), new(2, 0), new(0, -2), new(0, 2),
+                new(-2, -1), new(-2, 1), new(2, -1), new(2, 1),
+                new(-1, -2), new(1, -2), new(-1, 2), new(1, 2),
+                new(2, -2), new(-2, -2), new(2, 2), new(-2, 2),
+        };
+
+        private static Maybe<Unit> FindTarget(GameModel model, Unit unit) {
+            int2[] deltas = null;
+            switch (unit.AttackRange) {
+                case AttackRange.Melee:
+                    deltas = _meleeCheckDelta;
+                    break;
+                case AttackRange.Ranged:
+                    deltas = _rangedCheckDelta;
+                    break;
+            }
+            if (deltas != null) {
+                for (var i = 0; i < deltas.Length; i++) {
+                    var c = unit.Cell + deltas[i];
+                    if (UnitAt(model, c).Test(out var target) && (target.Owner != unit.Owner)) {
+                        return Maybe<Unit>.Just(unit);
+                    }
+                }
+            }
+
             return Maybe<Unit>.Nothing; //TODO: find unit to hit
         }
 
+        private static readonly int[] _moveCheckDelta = { 0, -1, 1 };
+
         private static Maybe<int2> FindCellToMove(GameModel model, Unit unit) {
             var d = unit.Direction * model.MoveAxis;
-            var c = unit.Cell + d;
-            if (InBounds(c, model.FieldSize) && !UnitAt(model, c).Test(out _)) {
-                return Maybe<int2>.Just(c);
-            }
+            var oc = unit.Cell + d;
             var side = new int2(model.MoveAxis.y, model.MoveAxis.x);
-            d += side;
-            c = unit.Cell + d;
-            if (InBounds(c, model.FieldSize) && !UnitAt(model, c).Test(out _)) {
-                return Maybe<int2>.Just(c);
+            for (var i = 0; i < _moveCheckDelta.Length; i++) {
+                var c = oc + side * _moveCheckDelta[i];
+                if (InBounds(c, model.FieldSize) && !UnitAt(model, c).Test(out _)) {
+                    return Maybe<int2>.Just(c);
+                }
             }
-            d -= side * 2;
-            if (InBounds(c, model.FieldSize) && !UnitAt(model, unit.Cell + d).Test(out _)) {
-                return Maybe<int2>.Just(c);
-            }
+
             return Maybe<int2>.Nothing;
         }
 
@@ -159,9 +214,13 @@ namespace TenSecCastle.Game {
                     player.SpawnPoints.At(player.CurrentSpawnPoint).Test(out var spawnPoint)
                     && !UnitAt(model, spawnPoint).Test(out _)
                 ) {
-                    model.Units += CreateUnit(
-                        model.BasicUnit, player.Slots, ++model.LastUnitId, spawnPoint, player.SpawnDirection
-                    );
+                    var unit = CreateUnit(model.BasicUnit, player.Slots);
+                    unit.Id = ++model.LastUnitId;
+                    unit.Cell = spawnPoint;
+                    unit.Direction = player.SpawnDirection;
+                    unit.Owner = player.Id;
+
+                    model.Units += unit;
                 }
             }
 
@@ -203,8 +262,10 @@ namespace TenSecCastle.Game {
             ).Map(&ToSlot);
         }
 
-        private static Unit CreateUnit(Unit baseUnit, L<Slot> currentSlots, ulong id, int2 cell, int2 direction) {
+        private static Unit CreateUnit(Unit baseUnit, L<Slot> currentSlots) {
             var slots = currentSlots.Enumerator;
+            baseUnit.HitPoints = baseUnit.MaxHitPoints;
+
             while (slots.MoveNext()) {
                 var slot = slots.Current;
                 var attributes = slot.Item.Attributes.Enumerator;
@@ -257,9 +318,6 @@ namespace TenSecCastle.Game {
                     }
                 }
             }
-            baseUnit.Id = id;
-            baseUnit.Cell = cell;
-            baseUnit.Direction = direction;
             return baseUnit;
         }
     }

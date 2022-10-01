@@ -9,8 +9,8 @@ namespace TenSecCastle.Game {
             var model = new GameModel {
                     Items = GameConfig.Items,
                     BasicUnit = GameConfig.BasicUnit,
-                    FieldSize = new int2(2, 12),
-                    Interval = 2,
+                    FieldSize = new int2(2, 14),
+                    Interval = 5,
                     BaseIncome = 1,
                     MoveAxis = new int2(0, 1),
                     Timeout = 2,
