@@ -32,7 +32,7 @@ namespace TenSecCastle.View {
                 }
             }
             
-            if (unit.HitPoints != _currentUnitHP) {
+            /*if (unit.HitPoints != _currentUnitHP) {
                 _currentUnitHP = unit.HitPoints;
                 if (_currentUnitHP < unit.MaxHitPoints * 0.25f) {
                     _playerAnimator.Play($"Male Sword Damage Heavy");
@@ -41,7 +41,7 @@ namespace TenSecCastle.View {
                     _playerAnimator.Play($"Male Sword Damage Light");
                 }
                 
-            }
+            }*/
             
             //animation.time = math.clamp(unit.StateTime, 0 , animation.length); 
         }

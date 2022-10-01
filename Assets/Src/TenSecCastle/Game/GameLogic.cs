@@ -56,6 +56,9 @@ namespace TenSecCastle.Game {
                             unit.State = UnitState.Idle;
                             unit.StateTime = 0;
                             unit.StateProgress = 0;
+                            if (!UpdateUnit(unit, model, dt).Test(out unit)) {
+                                return Maybe<Unit>.Nothing;
+                            }
                         }
                         break;
                     }
@@ -67,6 +70,9 @@ namespace TenSecCastle.Game {
                             unit.State = UnitState.Idle;
                             unit.StateTime = 0;
                             unit.StateProgress = 0;
+                            if (!UpdateUnit(unit, model, dt).Test(out unit)) {
+                                return Maybe<Unit>.Nothing;
+                            }
                         }
                         break;
                     }
