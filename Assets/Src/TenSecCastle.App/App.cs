@@ -3,10 +3,9 @@ using Rondo.Core.Lib;
 using Rondo.Core.Lib.Containers;
 using Rondo.Core.Lib.Platform;
 using Rondo.Unity;
-using TenSecCastle;
 using UnityEngine;
 
-namespace App {
+namespace TenSecCastle.App {
     public unsafe class App : App<Model, Msg, Obj> {
         private Runtime<Model, Msg, Obj>.Config _config = TenSecCastle.Config.New;
         private CLa<Model, Msg, Model, L<Cmd<Msg>>> _dumpUpdate;
