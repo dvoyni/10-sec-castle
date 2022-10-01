@@ -3,6 +3,7 @@ using Rondo.Core.Extras;
 using Rondo.Core.Lib;
 using Rondo.Core.Lib.Containers;
 using Rondo.Core.Lib.Platform;
+using Rondo.Unity.Utils;
 using TenSecCastle.Model;
 using Unity.Mathematics;
 using Random = Unity.Mathematics.Random;
@@ -28,6 +29,7 @@ namespace TenSecCastle.Game {
                     case UnitState.Idle: {
                         if (!InBounds(unit.Cell + unit.Direction, model->FieldSize, model->MoveAxis)) {
                             //TODO: hit castle
+                            Debug.Log("hit castle");
                         }
                         else if (FindTarget(*model, unit).Test(out var target)) {
                             unit.State = UnitState.Attacking;
@@ -82,10 +84,10 @@ namespace TenSecCastle.Game {
 
         private static bool InBounds(int2 cell, int2 bounds, int2 axis) {
             if (axis.x == 1) {
-                return (cell.x < 0) || (cell.x >= bounds.x);
+                return (cell.x >= 0) && (cell.x < bounds.x);
             }
             if (axis.y == 1) {
-                return (cell.y < 0) || (cell.y >= bounds.y);
+                return (cell.y >= 0) && (cell.y < bounds.y);
             }
             Assert.Fail("Invalid move axis");
             return false;
