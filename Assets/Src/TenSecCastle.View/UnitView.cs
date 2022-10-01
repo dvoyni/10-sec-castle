@@ -19,15 +19,19 @@ namespace TenSecCastle.View {
                 switch (_currentState) {
                     case UnitState.Moving:
                         _playerAnimator.Play("Male_Sword_Walk");
+                        _playerAnimator.speed = unit.MoveSpeed*0.85f;
                         break;
                     case UnitState.Idle:
                         _playerAnimator.Play("Male Sword Stance");
+                        _playerAnimator.speed = 1;
                         break;
                     case UnitState.Attacking:
                         _playerAnimator.Play($"Male Attack {Random.Range(1,4)}");
+                        _playerAnimator.speed = unit.AttackSpeed;
                         break;
                     case UnitState.Dieing:
                         _playerAnimator.Play($"Male Sword Die");
+                        _playerAnimator.speed = 1;
                         break;
                 }
             }
