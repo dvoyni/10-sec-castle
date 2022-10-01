@@ -226,20 +226,22 @@ namespace TenSecCastle.Game {
         }
 
         private static GameModel SpawnUnit(GameModel model) {
-            var players = model.Players.Enumerator;
-            while (players.MoveNext()) {
-                var player = players.Current;
-                if (
-                    player.SpawnPoints.At(player.CurrentSpawnPoint).Test(out var spawnPoint)
-                    && !UnitAt(model, spawnPoint).Test(out _)
-                ) {
-                    var unit = CreateUnit(model.BasicUnit, player.Slots);
-                    unit.Id = ++model.LastUnitId;
-                    unit.Cell = spawnPoint;
-                    unit.MoveDirection = player.SpawnDirection;
-                    unit.Owner = player.Id;
+            for (var i = 0; i < model.Players.Length(); i++) {
+                if (model.Players.At(i).Test(out var player)) {
+                    if (
+                        player.SpawnPoints.At(player.CurrentSpawnPoint).Test(out var spawnPoint)
+                        && !UnitAt(model, spawnPoint).Test(out _)
+                    ) {
+                        var unit = CreateUnit(model.BasicUnit, player.Slots);
+                        unit.Id = ++model.LastUnitId;
+                        unit.Cell = spawnPoint;
+                        unit.MoveDirection = player.SpawnDirection;
+                        unit.Owner = player.Id;
 
-                    model.Units += unit;
+                        model.Units += unit;
+                        player.CurrentSpawnPoint = (player.CurrentSpawnPoint + 1) % player.SpawnPoints.Length();
+                        model.Players = model.Players.Replace(i, player);
+                    }
                 }
             }
 
