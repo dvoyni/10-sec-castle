@@ -29,9 +29,14 @@ namespace TenSecCastle.Game {
         private static Obj ViewUnit(Unit unit) {
             var cellSize = 1.5f;
             var pos = new float3(unit.Cell.x, 0, unit.Cell.y) * cellSize;
-            var dir = new float3(unit.Direction.x, 0, unit.Direction.y);
-            if (unit.State == UnitState.Moving) {
-                pos = math.lerp(pos - dir * cellSize, pos, unit.StateProgress);
+            var dir = new float3(unit.MoveDirection.x, 0, unit.MoveDirection.y);
+            switch (unit.State) {
+                case UnitState.Moving:
+                    pos = math.lerp(pos - dir * cellSize, pos, unit.StateProgress);
+                    break;
+                case UnitState.Attacking:
+                    dir = new float3(unit.AttackDirection.x, 0, unit.AttackDirection.y);
+                    break;
             }
             return new Obj($"Unit:{unit.Id}",
                 components: new(

@@ -24,94 +24,100 @@ namespace TenSecCastle.Game {
         }
 
         private static GameModel UpdateUnits(GameModel model, float dt) {
-            static Maybe<Unit> UpdateUnit(Unit unit, GameModel* model, float* dt) {
-                switch (unit.State) {
-                    case UnitState.Idle: {
-                        if (!InBounds(unit.Cell + unit.Direction, model->FieldSize, model->MoveAxis)) {
-                            Debug.Log("hit castle");
-                            unit.State = UnitState.Dieing;
-                            unit.StateTime = 0;
-                            unit.StateProgress = 0;
-                        }
-                        else if (FindTarget(*model, unit).Test(out var target)) {
-                            unit.State = UnitState.Attacking;
-                            unit.StateTime = 0;
-                            unit.StateProgress = 0;
-                            unit.TargetUnitId = target.Id;
-                        }
-                        else if (FindCellToMove(*model, unit).Test(out var cell)) {
-                            unit.State = UnitState.Moving;
-                            unit.StateTime = 0;
-                            unit.StateProgress = 0;
-                            unit.Direction = cell - unit.Cell;
-                            unit.Cell = cell;
-                        }
-                        break;
+            for (var i = model.Units.Length() - 1; i >= 0; i--) {
+                if (model.Units.At(i).Test(out var unit)) {
+                    if ((unit.HitPoints <= 0) && (unit.State != UnitState.Dieing)) {
+                        unit.HitPoints = 0;
+                        unit.State = UnitState.Dieing;
+                        unit.StateTime = 0;
+                        unit.StateProgress = 0;
                     }
-                    case UnitState.Attacking: {
-                        unit.StateTime += *dt;
-                        var len = 1f / unit.AttackSpeed;
-                        unit.StateProgress = unit.StateTime / len;
-                        if (unit.StateTime >= len) {
-                            unit.State = UnitState.Idle;
-                            unit.StateTime = 0;
-                            unit.StateProgress = 0;
-                            if (!UpdateUnit(unit, model, dt).Test(out unit)) {
-                                return Maybe<Unit>.Nothing;
+
+                    switch (unit.State) {
+                        case UnitState.Idle: {
+                            if (!InBounds(unit.Cell + unit.MoveDirection, model.FieldSize, model.MoveAxis)) {
+                                Debug.Log("hit castle");
+                                unit.State = UnitState.Dieing;
+                                unit.StateTime = 0;
+                                unit.StateProgress = 0;
                             }
-                        }
-                        break;
-                    }
-                    case UnitState.Moving: {
-                        var len = 1f / unit.MoveSpeed;
-                        unit.StateTime += *dt;
-                        unit.StateProgress = unit.StateTime / len;
-                        if (unit.StateTime >= len) {
-                            unit.State = UnitState.Idle;
-                            unit.StateTime = 0;
-                            unit.StateProgress = 0;
-                            if (!UpdateUnit(unit, model, dt).Test(out unit)) {
-                                return Maybe<Unit>.Nothing;
+                            else if (FindTarget(model, unit).Test(out var target)) {
+                                unit.State = UnitState.Attacking;
+                                unit.StateTime = 0;
+                                unit.StateProgress = 0;
+                                unit.TargetUnitId = target.Id;
+                                unit.AttackDirection = target.Cell - unit.Cell;
+
+                                if (
+                                    model.Units
+                                    .FindIndex(Cf.New<Unit, ulong, bool>(&UnitWithId, target.Id))
+                                    .Test(out var targetIndex)
+                                ) {
+                                    target.HitPoints -= CalculateDamage(unit, target);
+                                    model.Units = model.Units.Replace(targetIndex, target);
+                                }
                             }
+                            else if (FindCellToMove(model, unit).Test(out var cell)) {
+                                unit.State = UnitState.Moving;
+                                unit.StateTime = 0;
+                                unit.StateProgress = 0;
+                                unit.MoveDirection = cell - unit.Cell;
+                                unit.Cell = cell;
+                            }
+
+                            model.Units = model.Units.Replace(i, unit);
+                            break;
                         }
-                        break;
+                        case UnitState.Attacking: {
+                            unit.StateTime += dt;
+                            var len = 1f / unit.AttackSpeed;
+                            unit.StateProgress = unit.StateTime / len;
+                            if (unit.StateTime >= len) {
+                                unit.State = UnitState.Idle;
+                                unit.StateTime = 0;
+                                unit.StateProgress = 0;
+
+                                model.Units = model.Units.Replace(i, unit);
+                                i++;
+                            }
+                            else {
+                                model.Units = model.Units.Replace(i, unit);
+                            }
+                            break;
+                        }
+                        case UnitState.Moving: {
+                            var len = 1f / unit.MoveSpeed;
+                            unit.StateTime += dt;
+                            unit.StateProgress = unit.StateTime / len;
+                            if (unit.StateTime >= len) {
+                                unit.State = UnitState.Idle;
+                                unit.StateTime = 0;
+                                unit.StateProgress = 0;
+                                model.Units = model.Units.Replace(i, unit);
+                                i++;
+                            }
+                            else {
+                                model.Units = model.Units.Replace(i, unit);
+                            }
+                            break;
+                        }
+                        case UnitState.Dieing:
+                            unit.StateTime += dt;
+                            if (unit.StateTime > 2f) { //Death animation length
+                                model.Units = model.Units.Remove(i);
+                            }
+                            else {
+                                model.Units = model.Units.Replace(i, unit);
+                            }
+                            break;
                     }
-                    case UnitState.Dieing:
-                        unit.StateTime += *dt;
-                        if (unit.StateTime > 2f) { //Death animation length
-                            return Maybe<Unit>.Nothing;
-                        }
-                        break;
                 }
-                return Maybe<Unit>.Just(unit);
             }
 
-            static bool WithId(Unit unit, ulong* id) {
+            static bool UnitWithId(Unit unit, ulong* id) {
                 return unit.Id == *id;
             }
 
-            model.Units = model.Units.FilterMap(Cf.New<Unit, GameModel, float, Maybe<Unit>>(&UpdateUnit, model, dt));
-
-            for (var i = 0; i < model.Units.Length(); i++) {
-                if (model.Units.At(i).Test(out var unit)) {
-                    if ((unit.State == UnitState.Attacking) && (unit.StateTime == 0)) {
-                        if (
-                            model.Units
-                                    .FindIndex(Cf.New<Unit, ulong, bool>(&WithId, unit.TargetUnitId))
-                                    .Test(out var targetIndex)
-                            && model.Units.At(targetIndex).Test(out var target)
-                        ) {
-                            target.HitPoints -= CalculateDamage(unit, target);
-                            if (target.HitPoints <= 0) {
-                                target.HitPoints = 0;
-                                target.State = UnitState.Dieing;
-                                target.StateTime = 0;
-                            }
-                            model.Units = model.Units.Replace(targetIndex, target);
-                        }
-                    }
-                }
-            }
             return model;
         }
 
@@ -166,24 +172,31 @@ namespace TenSecCastle.Game {
             if (deltas != null) {
                 for (var i = 0; i < deltas.Length; i++) {
                     var c = unit.Cell + deltas[i];
-                    if (UnitAt(model, c).Test(out var target) && (target.Owner != unit.Owner)) {
-                        return Maybe<Unit>.Just(unit);
+                    if (
+                        UnitAt(model, c).Test(out var target)
+                        && (target.Owner != unit.Owner)
+                        && (target.State != UnitState.Dieing)
+                    ) {
+                        return Maybe<Unit>.Just(target);
                     }
                 }
             }
 
-            return Maybe<Unit>.Nothing; //TODO: find unit to hit
+            return Maybe<Unit>.Nothing;
         }
 
         private static readonly int[] _moveCheckDelta = { 0, -1, 1 };
 
         private static Maybe<int2> FindCellToMove(GameModel model, Unit unit) {
-            var d = unit.Direction * model.MoveAxis;
+            var d = unit.MoveDirection * model.MoveAxis;
             var oc = unit.Cell + d;
             var side = new int2(model.MoveAxis.y, model.MoveAxis.x);
             for (var i = 0; i < _moveCheckDelta.Length; i++) {
                 var c = oc + side * _moveCheckDelta[i];
-                if (InBounds(c, model.FieldSize) && !UnitAt(model, c).Test(out _)) {
+                if (
+                    InBounds(c, model.FieldSize)
+                    && (!UnitAt(model, c).Test(out unit) || (unit.State == UnitState.Dieing))
+                ) {
                     return Maybe<int2>.Just(c);
                 }
             }
@@ -223,7 +236,7 @@ namespace TenSecCastle.Game {
                     var unit = CreateUnit(model.BasicUnit, player.Slots);
                     unit.Id = ++model.LastUnitId;
                     unit.Cell = spawnPoint;
-                    unit.Direction = player.SpawnDirection;
+                    unit.MoveDirection = player.SpawnDirection;
                     unit.Owner = player.Id;
 
                     model.Units += unit;
@@ -270,7 +283,6 @@ namespace TenSecCastle.Game {
 
         private static Unit CreateUnit(Unit baseUnit, L<Slot> currentSlots) {
             var slots = currentSlots.Enumerator;
-            baseUnit.HitPoints = baseUnit.MaxHitPoints;
 
             while (slots.MoveNext()) {
                 var slot = slots.Current;
@@ -311,7 +323,7 @@ namespace TenSecCastle.Game {
                             }
                             break;
                         case AttributeKind.HitPoints:
-                            baseUnit.HitPoints += attr.Value;
+                            baseUnit.MaxHitPoints += attr.Value;
                             break;
                         case AttributeKind.HitPointRegen:
                             baseUnit.HpRegen += attr.Value;
@@ -324,6 +336,8 @@ namespace TenSecCastle.Game {
                     }
                 }
             }
+
+            baseUnit.HitPoints = baseUnit.MaxHitPoints;
             return baseUnit;
         }
     }

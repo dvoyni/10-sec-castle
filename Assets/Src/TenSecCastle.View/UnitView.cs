@@ -11,6 +11,7 @@ namespace TenSecCastle.View {
         public IMessenger Messenger { private get; set; }
 
         private UnitState _currentState;
+        private float _currentProgress;
         private float _currentUnitHP;
         public void Sync(Unit unit) {
            
@@ -35,7 +36,13 @@ namespace TenSecCastle.View {
                         break;
                 }
             }
-            
+
+            if (_currentProgress != unit.StateProgress && _currentState == UnitState.Attacking) {
+                if (_currentProgress > unit.StateProgress) {
+                    _playerAnimator.Play($"Male Attack {Random.Range(1, 4)}");
+                }
+                _currentProgress = unit.StateProgress;
+            }
             /*if (unit.HitPoints != _currentUnitHP) {
                 _currentUnitHP = unit.HitPoints;
                 if (_currentUnitHP < unit.MaxHitPoints * 0.25f) {
