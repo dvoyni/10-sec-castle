@@ -7,6 +7,9 @@ namespace TenSecCastle.Game {
             this = other;
         }
 
+        public L<Item> Items;
+        public Unit BasicUnit;
+
         public L<Player> Players;
         public L<Unit> Units;
         public float Timeout;
@@ -15,7 +18,6 @@ namespace TenSecCastle.Game {
     public struct Player {
         public ulong Id;
         public PlayerKind Kind;
-        public L<Item> Items;
         public L<Slot> Slots;
         public int Coins;
     }
