@@ -10,10 +10,10 @@ namespace TenSecCastle.Game {
                     Items = GameConfig.Items,
                     BasicUnit = GameConfig.BasicUnit,
                     FieldSize = new int2(2, 12),
-                    Interval = 10,
+                    Interval = 2,
                     BaseIncome = 1,
                     MoveAxis = new int2(0, 1),
-                    Timeout = 10,
+                    Timeout = 2,
             };
             model.Players = new(
                 new Player {

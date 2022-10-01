@@ -64,11 +64,12 @@ namespace TenSecCastle.Model {
         public UnitState State;
         public int2 Cell;
         public int2 Direction;
+        public float StateTime;
         public float StateProgress;
         public ulong TargetUnitId;
 
         public bool Equals(Unit other) {
-            return ArmorId == other.ArmorId && WeaponId == other.WeaponId && JewelryId == other.JewelryId && MaxHitPoints == other.MaxHitPoints && HpRegen == other.HpRegen && PhysicsAttack == other.PhysicsAttack && PhysicsDefense == other.PhysicsDefense && MagicAttack == other.MagicAttack && MagicDefense == other.MagicDefense && AttackType == other.AttackType && AttackRange == other.AttackRange && AttackSpeed.Equals(other.AttackSpeed) && MoveSpeed.Equals(other.MoveSpeed) && Owner == other.Owner && HitPoints == other.HitPoints && State == other.State && Cell.Equals(other.Cell) && Direction.Equals(other.Direction) && StateProgress.Equals(other.StateProgress) && KillIncome.Equals(other.KillIncome);
+            return ArmorId == other.ArmorId && WeaponId == other.WeaponId && JewelryId == other.JewelryId && MaxHitPoints == other.MaxHitPoints && HpRegen == other.HpRegen && PhysicsAttack == other.PhysicsAttack && PhysicsDefense == other.PhysicsDefense && MagicAttack == other.MagicAttack && MagicDefense == other.MagicDefense && AttackType == other.AttackType && AttackRange == other.AttackRange && AttackSpeed.Equals(other.AttackSpeed) && MoveSpeed.Equals(other.MoveSpeed) && Owner == other.Owner && HitPoints == other.HitPoints && State == other.State && Cell.Equals(other.Cell) && Direction.Equals(other.Direction) && StateTime.Equals(other.StateTime) && KillIncome.Equals(other.KillIncome);
         }
     }
 

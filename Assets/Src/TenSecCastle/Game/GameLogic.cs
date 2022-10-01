@@ -31,38 +31,44 @@ namespace TenSecCastle.Game {
                         }
                         else if (FindTarget(*model, unit).Test(out var target)) {
                             unit.State = UnitState.Attacking;
-                            unit.StateProgress = 0;
+                            unit.StateTime = 0;
                             unit.TargetUnitId = target.Id;
                             target.HitPoints -= CalculateDamage(unit, target);
                             if (target.HitPoints <= 0) {
                                 target.HitPoints = 0;
                                 target.State = UnitState.Dead;
-                                target.StateProgress = 0;
+                                target.StateTime = 0;
                             }
                         }
                         else if (FindCellToMove(*model, unit).Test(out var cell)) {
                             unit.State = UnitState.Moving;
-                            unit.StateProgress = 0;
+                            unit.StateTime = 0;
                             unit.Direction = cell - unit.Cell;
                             unit.Cell = cell;
                         }
                         break;
                     }
-                    case UnitState.Attacking:
-                        unit.StateProgress += *dt;
-                        if (unit.StateProgress > (1f / unit.AttackSpeed)) {
+                    case UnitState.Attacking: {
+                        unit.StateTime += *dt;
+                        var len = 1f / unit.AttackSpeed;
+                        unit.StateProgress = unit.StateTime / len;
+                        if (unit.StateTime >= len) {
                             unit.State = UnitState.Idle;
                         }
                         break;
-                    case UnitState.Moving:
-                        unit.StateProgress += *dt;
-                        if (unit.StateProgress > (1f / unit.MoveSpeed)) {
+                    }
+                    case UnitState.Moving: {
+                        var len = 1f / unit.MoveSpeed;
+                        unit.StateTime += *dt;
+                        unit.StateProgress = unit.StateTime / len;
+                        if (unit.StateTime > len) {
                             unit.State = UnitState.Idle;
                         }
                         break;
+                    }
                     case UnitState.Dead:
-                        unit.StateProgress += *dt;
-                        if (unit.StateProgress > 2f) { //Death animation length
+                        unit.StateTime += *dt;
+                        if (unit.StateTime > 2f) { //Death animation length
                             return Maybe<Unit>.Nothing;
                         }
                         break;
@@ -177,7 +183,7 @@ namespace TenSecCastle.Game {
             }
 
             var items = model.Items.SortWith(
-                Cf.New<Item, Item, Random, int>(&RandComp, new Random((uint)new DateTime().ToFileTime()))
+                Cf.New<Item, Item, Random, int>(&RandComp, new Random((uint)DateTime.Now.ToFileTime()))
             );
 
             return new L<Maybe<Item>>(
