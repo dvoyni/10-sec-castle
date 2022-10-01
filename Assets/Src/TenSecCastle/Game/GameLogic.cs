@@ -288,6 +288,19 @@ namespace TenSecCastle.Game {
 
             while (slots.MoveNext()) {
                 var slot = slots.Current;
+
+                switch (slot.Item.SlotKind) {
+                    case SlotKind.Armor:
+                        baseUnit.ArmorId = slot.Item.Id;
+                        break;
+                    case SlotKind.Weapon:
+                        baseUnit.WeaponId = slot.Item.Id;
+                        break;
+                    case SlotKind.Jewelry:
+                        baseUnit.JewelryId = slot.Item.Id;
+                        break;
+                }
+
                 var attributes = slot.Item.Attributes.Enumerator;
                 while (attributes.MoveNext()) {
                     var attr = attributes.Current;
