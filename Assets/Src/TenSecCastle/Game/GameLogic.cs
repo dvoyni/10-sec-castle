@@ -28,8 +28,9 @@ namespace TenSecCastle.Game {
                 switch (unit.State) {
                     case UnitState.Idle: {
                         if (!InBounds(unit.Cell + unit.Direction, model->FieldSize, model->MoveAxis)) {
-                            //TODO: hit castle
                             Debug.Log("hit castle");
+                            unit.State = UnitState.Dieing;
+                            unit.StateTime = 0;
                         }
                         else if (FindTarget(*model, unit).Test(out var target)) {
                             unit.State = UnitState.Attacking;
@@ -38,13 +39,14 @@ namespace TenSecCastle.Game {
                             target.HitPoints -= CalculateDamage(unit, target);
                             if (target.HitPoints <= 0) {
                                 target.HitPoints = 0;
-                                target.State = UnitState.Dead;
+                                target.State = UnitState.Dieing;
                                 target.StateTime = 0;
                             }
                         }
                         else if (FindCellToMove(*model, unit).Test(out var cell)) {
                             unit.State = UnitState.Moving;
                             unit.StateTime = 0;
+                            unit.StateProgress = 0;
                             unit.Direction = cell - unit.Cell;
                             unit.Cell = cell;
                         }
@@ -63,12 +65,12 @@ namespace TenSecCastle.Game {
                         var len = 1f / unit.MoveSpeed;
                         unit.StateTime += *dt;
                         unit.StateProgress = unit.StateTime / len;
-                        if (unit.StateTime > len) {
+                        if (unit.StateTime >= len) {
                             unit.State = UnitState.Idle;
                         }
                         break;
                     }
-                    case UnitState.Dead:
+                    case UnitState.Dieing:
                         unit.StateTime += *dt;
                         if (unit.StateTime > 2f) { //Death animation length
                             return Maybe<Unit>.Nothing;
@@ -107,17 +109,19 @@ namespace TenSecCastle.Game {
 
         private static Maybe<int2> FindCellToMove(GameModel model, Unit unit) {
             var d = unit.Direction * model.MoveAxis;
-            if (!UnitAt(model, unit.Cell + d).Test(out _)) {
-                return Maybe<int2>.Just(unit.Cell + d);
+            var c = unit.Cell + d;
+            if (InBounds(c, model.FieldSize, model.MoveAxis) && !UnitAt(model, c).Test(out _)) {
+                return Maybe<int2>.Just(c);
             }
             var side = new int2(model.MoveAxis.y, model.MoveAxis.x);
             d += side;
-            if (!UnitAt(model, unit.Cell + d).Test(out _)) {
-                return Maybe<int2>.Just(unit.Cell + d);
+            c = unit.Cell + d;
+            if (InBounds(c, model.FieldSize, model.MoveAxis) && !UnitAt(model, c).Test(out _)) {
+                return Maybe<int2>.Just(c);
             }
             d -= side * 2;
-            if (!UnitAt(model, unit.Cell + d).Test(out _)) {
-                return Maybe<int2>.Just(unit.Cell + d);
+            if (InBounds(c, model.FieldSize, model.MoveAxis) && !UnitAt(model, unit.Cell + d).Test(out _)) {
+                return Maybe<int2>.Just(c);
             }
             return Maybe<int2>.Nothing;
         }
