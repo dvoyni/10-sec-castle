@@ -77,7 +77,7 @@ namespace TenSecCastle.Model {
         Idle,
         Attacking,
         Moving,
-        Dead,
+        Dieing,
     }
 
     public struct Item {
