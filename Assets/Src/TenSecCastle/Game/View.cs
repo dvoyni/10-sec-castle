@@ -29,13 +29,13 @@ namespace TenSecCastle.Game {
         private static Obj ViewUnit(Unit unit) {
             var cellSize = 1.5f;
             var pos = new float3(unit.Cell.x, 0, unit.Cell.y) * cellSize;
-            var dir = math.normalize(new float3(unit.Direction.x, 0, unit.Direction.y));
+            var dir = new float3(unit.Direction.x, 0, unit.Direction.y);
             if (unit.State == UnitState.Moving) {
                 pos = math.lerp(pos - dir * cellSize, pos, unit.StateProgress);
             }
             return new Obj($"Unit:{unit.Id}",
                 components: new(
-                    Rendering.Transform(pos, quaternion.LookRotation(dir, new float3(0, 1, 0))),
+                    Rendering.Transform(pos, quaternion.LookRotation(math.normalize(dir), new float3(0, 1, 0))),
                     Prefab.WithData("Assets/Prefabs/Unit.prefab", unit)
                 ));
         }

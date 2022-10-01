@@ -26,7 +26,7 @@ namespace TenSecCastle.View {
                     case UnitState.Attacking:
                         _playerAnimator.Play($"Male Attack {Random.Range(1,4)}");
                         break;
-                    case UnitState.Dead:
+                    case UnitState.Dieing:
                         _playerAnimator.Play($"Male Sword Die");
                         break;
                 }

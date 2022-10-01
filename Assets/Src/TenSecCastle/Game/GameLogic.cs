@@ -95,6 +95,10 @@ namespace TenSecCastle.Game {
             return false;
         }
 
+        private static bool InBounds(int2 cell, int2 bounds) {
+            return (cell.x >= 0) && (cell.x < bounds.x) && (cell.y >= 0) && (cell.y < bounds.y);
+        }
+
         private static Maybe<Unit> UnitAt(GameModel model, int2 cell) {
             static bool CellEq(Unit unit, int2* cell) {
                 return unit.Cell.Equals(*cell);
@@ -110,17 +114,17 @@ namespace TenSecCastle.Game {
         private static Maybe<int2> FindCellToMove(GameModel model, Unit unit) {
             var d = unit.Direction * model.MoveAxis;
             var c = unit.Cell + d;
-            if (InBounds(c, model.FieldSize, model.MoveAxis) && !UnitAt(model, c).Test(out _)) {
+            if (InBounds(c, model.FieldSize) && !UnitAt(model, c).Test(out _)) {
                 return Maybe<int2>.Just(c);
             }
             var side = new int2(model.MoveAxis.y, model.MoveAxis.x);
             d += side;
             c = unit.Cell + d;
-            if (InBounds(c, model.FieldSize, model.MoveAxis) && !UnitAt(model, c).Test(out _)) {
+            if (InBounds(c, model.FieldSize) && !UnitAt(model, c).Test(out _)) {
                 return Maybe<int2>.Just(c);
             }
             d -= side * 2;
-            if (InBounds(c, model.FieldSize, model.MoveAxis) && !UnitAt(model, unit.Cell + d).Test(out _)) {
+            if (InBounds(c, model.FieldSize) && !UnitAt(model, unit.Cell + d).Test(out _)) {
                 return Maybe<int2>.Just(c);
             }
             return Maybe<int2>.Nothing;
