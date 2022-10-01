@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "03622e0ace056d812ac4f30bd9def3f9222573fa"
+      "hash": "4da746832014d23c9faf6d6f49d394cd16ef12b9"
     },
     "com.dvoyni.rondo.unity": {
       "version": "https://github.com/dvoyni/rondo.unity.git",
