@@ -1,9 +1,10 @@
-﻿using Rondo.Core.Lib.Containers;
+﻿using System;
+using Rondo.Core.Lib.Containers;
 using Unity.Mathematics;
 
-namespace TenSecCastle.Game {
-    public struct Model {
-        public Model(Model other) {
+namespace TenSecCastle.Model {
+    public struct GameModel {
+        public GameModel(GameModel other) {
             this = other;
         }
 
@@ -31,7 +32,7 @@ namespace TenSecCastle.Game {
         public Item Item;
     }
 
-    public struct Unit {
+    public struct Unit : IEquatable<Unit> {
         public ulong ArmorId;
         public ulong WeaponId;
         public ulong JewelryId;
@@ -53,6 +54,10 @@ namespace TenSecCastle.Game {
         public int2 Cell;
         public int2 Direction;
         public float StateProgress;
+
+        public bool Equals(Unit other) {
+            return ArmorId == other.ArmorId && WeaponId == other.WeaponId && JewelryId == other.JewelryId && MaxHitPoints == other.MaxHitPoints && HpRegen == other.HpRegen && PhysicsAttack == other.PhysicsAttack && PhysicsDefense == other.PhysicsDefense && MagicAttack == other.MagicAttack && MagicDefense == other.MagicDefense && AttackType == other.AttackType && AttackRange == other.AttackRange && AttackSpeed.Equals(other.AttackSpeed) && MoveSpeed.Equals(other.MoveSpeed) && Owner == other.Owner && HitPoints == other.HitPoints && State == other.State && Cell.Equals(other.Cell) && Direction.Equals(other.Direction) && StateProgress.Equals(other.StateProgress);
+        }
     }
 
     public enum UnitState {

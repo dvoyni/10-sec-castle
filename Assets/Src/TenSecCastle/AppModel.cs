@@ -1,11 +1,13 @@
+using TenSecCastle.Model;
+
 namespace TenSecCastle {
-    public struct Model {
-        public Model(Screen screen) : this() {
+    public struct AppModel {
+        public AppModel(Screen screen) : this() {
             Screen = screen;
         }
 
         public Screen Screen;
-        public Game.Model GameModel;
+        public GameModel GameModel;
     }
 
     public enum Screen {

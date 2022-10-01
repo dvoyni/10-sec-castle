@@ -1,18 +1,12 @@
-using System;
 using Rondo.Core;
 using Rondo.Unity.Components;
+using TenSecCastle.Model;
 using UnityEngine;
 
 namespace TenSecCastle.View {
-    public struct UnitData : IEquatable<UnitData> {
-        public bool Equals(UnitData other) {
-            return false;
-        }
-    }
-
-    public class UnitView : MonoBehaviour, IDataDrivenComponent<UnitData> {
+    public class UnitView : MonoBehaviour, IDataDrivenComponent<Unit> {
         public IMessenger Messenger { private get; set; }
 
-        public void Sync(UnitData unit) { }
+        public void Sync(Unit unit) { }
     }
 }

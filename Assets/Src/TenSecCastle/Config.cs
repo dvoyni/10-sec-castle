@@ -7,23 +7,24 @@ using Rondo.Core.Lib.Platform;
 using Rondo.Core.Memory;
 using Rondo.Unity;
 using Rondo.Unity.Utils;
+using TenSecCastle.Model;
 
 namespace TenSecCastle {
     public static unsafe class Config {
-        public static Runtime<Model, Msg, Obj>.Config New => new() {
+        public static Runtime<AppModel, Msg, Obj>.Config New => new() {
                 Init = CLf.New(&Init),
-                Update = CLf.New<Msg, Model, (Model, L<Cmd<Msg>>)>(&Update),
-                Subscribe = CLf.New<Model, L<Sub<Msg>>>(&Subscribe),
-                View = CLf.New<Model, Obj>(&View),
-                Fail = Maybe<CLa<Exception, Model, Msg>>.Just(new CLa<Exception, Model, Msg>(&Fail)),
-                Reset = Maybe<CLa<Model>>.Just(new CLa<Model>(&Reset)),
+                Update = CLf.New<Msg, AppModel, (AppModel, L<Cmd<Msg>>)>(&Update),
+                Subscribe = CLf.New<AppModel, L<Sub<Msg>>>(&Subscribe),
+                View = CLf.New<AppModel, Obj>(&View),
+                Fail = Maybe<CLa<Exception, AppModel, Msg>>.Just(new CLa<Exception, AppModel, Msg>(&Fail)),
+                Reset = Maybe<CLa<AppModel>>.Just(new CLa<AppModel>(&Reset)),
         };
 
-        private static (Model, L<Cmd<Msg>>) Init() {
+        private static (AppModel, L<Cmd<Msg>>) Init() {
             return ToModelCmd(Game.Init.InitGame());
         }
 
-        private static (Model, L<Cmd<Msg>>) Update(Msg msg, Model model) {
+        private static (AppModel, L<Cmd<Msg>>) Update(Msg msg, AppModel model) {
             switch (msg.Screen) {
                 case Screen.Game:
                     return ToModelCmd(Game.Update.UpdateGame(msg.GameMsg, model.GameModel));
@@ -32,7 +33,7 @@ namespace TenSecCastle {
             return (model, new());
         }
 
-        private static L<Sub<Msg>> Subscribe(Model model) {
+        private static L<Sub<Msg>> Subscribe(AppModel model) {
             switch (model.Screen) {
                 case Screen.Game:
                     return Game.Subscribe.SubscribeGame(model.GameModel).Map(&ToMsg);
@@ -41,7 +42,7 @@ namespace TenSecCastle {
             return new();
         }
 
-        private static Obj View(Model model) {
+        private static Obj View(AppModel model) {
             switch (model.Screen) {
                 case Screen.Game:
                     return Game.View.ViewGame(model.GameModel);
@@ -50,24 +51,24 @@ namespace TenSecCastle {
             return new Obj();
         }
 
-        private static void Fail(Exception ex, Model model, Msg msg) {
+        private static void Fail(Exception ex, AppModel model, Msg msg) {
             Debug.Log(
                 $"{ex.Message}\n{ex.StackTrace}\nModel:\n{Serializer.Stringify(model)}\nMsg:{Serializer.Stringify(msg)}"
             );
         }
 
-        private static void Reset(Model dumpedModel) {
+        private static void Reset(AppModel dumpedModel) {
             if (Directory.Exists(Debug.DebugDumDir)) {
                 Directory.Delete(Debug.DebugDumDir, true);
             }
         }
 
-        private static (Model, L<Cmd<Msg>>) ToModelCmd((Game.Model model, L<Cmd<Game.Msg>> cmds) t) {
+        private static (AppModel, L<Cmd<Msg>>) ToModelCmd((GameModel model, L<Cmd<Game.Msg>> cmds) t) {
             return (ToModel(t.model), t.cmds.Map(&ToMsg));
         }
 
-        private static Model ToModel(Game.Model model) {
-            return new Model(Screen.Game) { GameModel = model };
+        private static AppModel ToModel(GameModel model) {
+            return new AppModel(Screen.Game) { GameModel = model };
         }
 
         public static Msg ToMsg(Game.Msg msg) {

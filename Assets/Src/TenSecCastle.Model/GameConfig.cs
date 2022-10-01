@@ -1,6 +1,6 @@
 ﻿using Rondo.Core.Lib.Containers;
 
-namespace TenSecCastle.Game {
+namespace TenSecCastle.Model {
     public class GameConfig {
         public static L<Item> Items {
             get {

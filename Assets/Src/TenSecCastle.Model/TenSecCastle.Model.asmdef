@@ -1,19 +1,16 @@
 {
-    "name": "TenSecCastle.App",
+    "name": "TenSecCastle.Model",
     "rootNamespace": "",
     "references": [
         "GUID:d7b861ae110bd4299b524eca2e896853",
-        "GUID:968f4c40ec17f492fb164b26d7f9efdc",
-        "GUID:8d627279e537c284d9be40f977f9831d",
-        "GUID:d8b63aba1907145bea998dd612889d6b",
-        "GUID:53053ff0a63f27c4e930e5d523fa0242"
+        "GUID:d8b63aba1907145bea998dd612889d6b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": true,
+    "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

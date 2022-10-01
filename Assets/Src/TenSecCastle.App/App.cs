@@ -6,11 +6,11 @@ using Rondo.Unity;
 using UnityEngine;
 
 namespace TenSecCastle.App {
-    public unsafe class App : App<Model, Msg, Obj> {
-        private Runtime<Model, Msg, Obj>.Config _config = TenSecCastle.Config.New;
-        private CLa<Model, Msg, Model, L<Cmd<Msg>>> _dumpUpdate;
+    public unsafe class App : App<AppModel, Msg, Obj> {
+        private Runtime<AppModel, Msg, Obj>.Config _config = TenSecCastle.Config.New;
+        private CLa<AppModel, Msg, AppModel, L<Cmd<Msg>>> _dumpUpdate;
 
-        protected override Runtime<Model, Msg, Obj>.Config Config => _config;
+        protected override Runtime<AppModel, Msg, Obj>.Config Config => _config;
 
         protected override IPresenter<Obj> NewPresenter(Transform parent) {
             return new Presenter<Obj>(parent);

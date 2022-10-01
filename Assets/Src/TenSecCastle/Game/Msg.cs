@@ -5,6 +5,7 @@ namespace TenSecCastle.Game {
         }
 
         public readonly MsgKind Kind;
+        public float DeltaTime;
     }
 
     public enum MsgKind {
