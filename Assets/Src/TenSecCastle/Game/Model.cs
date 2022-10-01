@@ -7,7 +7,26 @@ namespace TenSecCastle.Game {
             this = other;
         }
 
+        public L<Player> Players;
         public L<Unit> Units;
+        public float Timeout;
+    }
+
+    public struct Player {
+        public ulong Id;
+        public PlayerKind Kind;
+        public L<Item> Items;
+        public L<Slot> Slots;
+        public int Coins;
+    }
+
+    public enum PlayerKind {
+        Human,
+        AI,
+    }
+
+    public struct Slot {
+        public Item Item;
     }
 
     public struct Unit {
@@ -23,9 +42,10 @@ namespace TenSecCastle.Game {
         public int MagicDefense;
         public AttackType AttackType;
         public AttackRange AttackRange;
-        public int AttackSpeed;
-        public int MoveSpeed;
+        public float AttackSpeed;
+        public float MoveSpeed;
 
+        public ulong Owner;
         public int HitPoints;
         public UnitState State;
         public int2 Cell;
@@ -41,11 +61,11 @@ namespace TenSecCastle.Game {
 
     public struct Item {
         public ulong Id;
-        public Slot Slot;
+        public SlotKind SlotKind;
         public L<Attribute> Attributes;
     }
 
-    public enum Slot {
+    public enum SlotKind {
         Armor,
         Weapon,
         Jewelry,
