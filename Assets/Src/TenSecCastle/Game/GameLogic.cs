@@ -1,9 +1,11 @@
 ﻿using System;
+using Rondo.Core.Extras;
 using Rondo.Core.Lib;
 using Rondo.Core.Lib.Containers;
 using Rondo.Core.Lib.Platform;
 using TenSecCastle.Model;
 using Unity.Mathematics;
+using Random = Unity.Mathematics.Random;
 
 namespace TenSecCastle.Game {
     public static unsafe class GameLogic {
@@ -19,12 +21,15 @@ namespace TenSecCastle.Game {
 
             return (model, new());
         }
-        
+
         private static GameModel UpdateUnits(GameModel model, float dt) {
             static Maybe<Unit> UpdateUnit(Unit unit, GameModel* model, float* dt) {
                 switch (unit.State) {
                     case UnitState.Idle: {
-                        if (FindTarget(*model, unit).Test(out var target)) {
+                        if (!InBounds(unit.Cell + unit.Direction, model->FieldSize, model->MoveAxis)) {
+                            //TODO: hit castle
+                        }
+                        else if (FindTarget(*model, unit).Test(out var target)) {
                             unit.State = UnitState.Attacking;
                             unit.StateProgress = 0;
                             unit.TargetUnitId = target.Id;
@@ -69,6 +74,17 @@ namespace TenSecCastle.Game {
             return model;
         }
 
+        private static bool InBounds(int2 cell, int2 bounds, int2 axis) {
+            if (axis.x == 1) {
+                return (cell.x < 0) || (cell.x >= bounds.x);
+            }
+            if (axis.y == 1) {
+                return (cell.y < 0) || (cell.y >= bounds.y);
+            }
+            Assert.Fail("Invalid move axis");
+            return false;
+        }
+
         private static Maybe<Unit> UnitAt(GameModel model, int2 cell) {
             static bool CellEq(Unit unit, int2* cell) {
                 return unit.Cell.Equals(*cell);
@@ -78,15 +94,40 @@ namespace TenSecCastle.Game {
         }
 
         private static Maybe<Unit> FindTarget(GameModel model, Unit value) {
-            throw new NotImplementedException();
+            return Maybe<Unit>.Nothing; //TODO: find unit to hit
         }
 
-        private static Maybe<int2> FindCellToMove(GameModel model, Unit value) {
-            throw new NotImplementedException();
+        private static Maybe<int2> FindCellToMove(GameModel model, Unit unit) {
+            var d = unit.Direction * model.MoveAxis;
+            if (!UnitAt(model, unit.Cell + d).Test(out _)) {
+                return Maybe<int2>.Just(unit.Cell + d);
+            }
+            var side = new int2(model.MoveAxis.y, model.MoveAxis.x);
+            d += side;
+            if (!UnitAt(model, unit.Cell + d).Test(out _)) {
+                return Maybe<int2>.Just(unit.Cell + d);
+            }
+            d -= side * 2;
+            if (!UnitAt(model, unit.Cell + d).Test(out _)) {
+                return Maybe<int2>.Just(unit.Cell + d);
+            }
+            return Maybe<int2>.Nothing;
         }
 
-        private static int CalculateDamage(Unit attacker, Unit victim) {
-            throw new NotImplementedException();
+        private static float CalculateDamage(Unit attacker, Unit victim) {
+            var attack = 0f;
+            var defense = 0f;
+            switch (attacker.AttackType) {
+                case AttackType.Physical:
+                    attack = attacker.PhysicsAttack;
+                    defense = victim.PhysicsDefense;
+                    break;
+                case AttackType.Magical:
+                    attack = attacker.MagicAttack;
+                    defense = victim.MagicDefense;
+                    break;
+            }
+            return attack * (1 - (float)Math.Log(defense + 1, 40));
         }
 
         private static GameModel AI(GameModel model) {
@@ -102,8 +143,9 @@ namespace TenSecCastle.Game {
                     player.SpawnPoints.At(player.CurrentSpawnPoint).Test(out var spawnPoint)
                     && !UnitAt(model, spawnPoint).Test(out _)
                 ) {
-                    var unit = CreateUnit(model.BasicUnit, player.Slots, ++model.LastUnitId, spawnPoint);
-                    model.Units += unit;
+                    model.Units += CreateUnit(
+                        model.BasicUnit, player.Slots, ++model.LastUnitId, spawnPoint, player.SpawnDirection
+                    );
                 }
             }
 
@@ -112,16 +154,40 @@ namespace TenSecCastle.Game {
                 player.Coins += model->BaseIncome;
                 return player;
             }
+
             model.Players = model.Players.Map(Cf.New<Player, GameModel, Player>(&Reset, model));
 
             return model;
         }
 
-        private static L<Slot> ShuffleSlots(GameModel model) {
-            throw new NotImplementedException();
+        public static L<Slot> ShuffleSlots(GameModel model) {
+            static int RandComp(Item a, Item b, Random* r) {
+                return r->NextInt(2) == 0 ? -1 : 1;
+            }
+
+            static bool WithSlot(Item a, SlotKind* slot) {
+                return a.SlotKind == *slot;
+            }
+
+            static Slot ToSlot(Maybe<Item> maybeItem) {
+                if (!maybeItem.Test(out var item)) {
+                    Assert.Fail("There are not enough items available");
+                }
+                return new Slot { Item = item };
+            }
+
+            var items = model.Items.SortWith(
+                Cf.New<Item, Item, Random, int>(&RandComp, new Random((uint)new DateTime().ToFileTime()))
+            );
+
+            return new L<Maybe<Item>>(
+                items.First(Cf.New<Item, SlotKind, bool>(&WithSlot, SlotKind.Weapon)),
+                items.First(Cf.New<Item, SlotKind, bool>(&WithSlot, SlotKind.Armor)),
+                items.First(Cf.New<Item, SlotKind, bool>(&WithSlot, SlotKind.Jewelry))
+            ).Map(&ToSlot);
         }
 
-        private static Unit CreateUnit(Unit baseUnit, L<Slot> currentSlots, ulong id, int2 spawnPoint) {
+        private static Unit CreateUnit(Unit baseUnit, L<Slot> currentSlots, ulong id, int2 cell, int2 direction) {
             var slots = currentSlots.Enumerator;
             while (slots.MoveNext()) {
                 var slot = slots.Current;
@@ -168,7 +234,7 @@ namespace TenSecCastle.Game {
                             baseUnit.HpRegen += attr.Value;
                             break;
                         case AttributeKind.Income:
-                            baseUnit.KillIncome += attr.Value;
+                            baseUnit.KillIncome += (int)attr.Value;
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -176,7 +242,8 @@ namespace TenSecCastle.Game {
                 }
             }
             baseUnit.Id = id;
-            baseUnit.Cell = spawnPoint;
+            baseUnit.Cell = cell;
+            baseUnit.Direction = direction;
             return baseUnit;
         }
     }

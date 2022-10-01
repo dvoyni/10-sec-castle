@@ -13,6 +13,7 @@ namespace TenSecCastle.Model {
         public int2 FieldSize;
         public float Interval;
         public int BaseIncome;
+        public int2 MoveAxis;
 
         public L<Player> Players;
         public L<Unit> Units;
@@ -25,6 +26,7 @@ namespace TenSecCastle.Model {
         public PlayerKind Kind;
         public L<Slot> Slots;
         public int Coins;
+        public int2 SpawnDirection;
         public L<int2> SpawnPoints;
         public int CurrentSpawnPoint;
     }
