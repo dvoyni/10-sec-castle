@@ -38,6 +38,8 @@ namespace TenSecCastle.Model {
 
     public struct Slot {
         public Item Item;
+        public Maybe<Item> PrevItem;
+        public float SwapProgress;
     }
 
     public struct Unit : IEquatable<Unit> {

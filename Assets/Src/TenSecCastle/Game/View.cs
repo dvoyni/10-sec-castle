@@ -53,11 +53,7 @@ namespace TenSecCastle.Game {
         }
 
         private static Obj ViewPlayerUI(GameModel model) {
-            static bool IsHuman(Player player) {
-                return player.Kind == PlayerKind.Human;
-            }
-
-            if (model.Players.First(&IsHuman).Test(out var player)) {
+            if (model.Players.First(&Utils.PlayerIsHuman).Test(out var player)) {
                 return new("PlayerUI",
                     components: new(
                         UI.Canvas(new(renderMode: UI.RenderMode.ScreenSpaceOverlay)),
