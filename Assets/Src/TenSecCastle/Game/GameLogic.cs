@@ -6,7 +6,6 @@ using Rondo.Core.Lib.Platform;
 using Rondo.Unity.Utils;
 using TenSecCastle.Model;
 using Unity.Mathematics;
-using Random = Unity.Mathematics.Random;
 
 namespace TenSecCastle.Game {
     public static unsafe class GameLogic {
@@ -20,7 +19,24 @@ namespace TenSecCastle.Game {
                 model.Timeout += model.Interval;
             }
 
+            model = UpdateSlots(model, dt);
+
             return (model, new());
+        }
+
+        private static GameModel UpdateSlots(GameModel model, float dt) {
+            static Slot UpdateSlot(Slot slot, float* dt) {
+                slot.SwapProgress = math.min(1, slot.SwapProgress + *dt);
+                return slot;
+            }
+
+            static Player UpdatePlayer(Player player, float* dt) {
+                player.Slots = player.Slots.Map(Cf.New<Slot, float, Slot>(&UpdateSlot, *dt));
+                return player;
+            }
+
+            model.Players = model.Players.Map(Cf.New<Player, float, Player>(&UpdatePlayer, dt));
+            return model;
         }
 
         private static GameModel UpdateUnits(GameModel model, float dt) {
@@ -260,14 +276,6 @@ namespace TenSecCastle.Game {
         }
 
         public static L<Slot> ShuffleSlots(GameModel model) {
-            static int RandComp(Item a, Item b, Random* r) {
-                return r->NextInt(2) == 0 ? -1 : 1;
-            }
-
-            static bool WithSlot(Item a, SlotKind* slot) {
-                return a.SlotKind == *slot;
-            }
-
             static Slot ToSlot(Maybe<Item> maybeItem) {
                 if (!maybeItem.Test(out var item)) {
                     Assert.Fail("There are not enough items available");
@@ -275,14 +283,9 @@ namespace TenSecCastle.Game {
                 return new Slot { Item = item };
             }
 
-            var items = model.Items.SortWith(
-                Cf.New<Item, Item, Random, int>(&RandComp, new Random((uint)DateTime.Now.ToFileTime()))
-            );
+            var items = Utils.ShuffleItems(model.Items);
 
-            return new L<Maybe<Item>>(
-                items.First(Cf.New<Item, SlotKind, bool>(&WithSlot, SlotKind.Weapon)),
-                items.First(Cf.New<Item, SlotKind, bool>(&WithSlot, SlotKind.Armor)),
-                items.First(Cf.New<Item, SlotKind, bool>(&WithSlot, SlotKind.Jewelry))
+            return new L<Maybe<Item>>(Utils.FirstItemWithSlot(items, SlotKind.Weapon), Utils.FirstItemWithSlot(items, SlotKind.Armor), Utils.FirstItemWithSlot(items, SlotKind.Jewelry)
             ).Map(&ToSlot);
         }
 
