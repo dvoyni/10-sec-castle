@@ -4,6 +4,7 @@ using Rondo.Unity;
 using Rondo.Unity.Components;
 using Rondo.Unity.Utils;
 using TenSecCastle.Model;
+using TenSecCastle.View;
 using Unity.Mathematics;
 
 namespace TenSecCastle.Game {
@@ -27,10 +28,10 @@ namespace TenSecCastle.Game {
         }
 
         private static L<Obj> ViewUnits(GameModel model) {
-            return model.Units.Map(&ViewUnit);
+            return model.Units.Map(Cf.New<Unit, GameModel, Obj>(&ViewUnit, model));
         }
 
-        private static Obj ViewUnit(Unit unit) {
+        private static Obj ViewUnit(Unit unit, GameModel* model) {
             var cellSize = 1.5f;
             var pos = new float3(unit.Cell.x, 0, unit.Cell.y) * cellSize;
             var dir = new float3(unit.MoveDirection.x, 0, unit.MoveDirection.y);
@@ -49,7 +50,10 @@ namespace TenSecCastle.Game {
                 key: Key.New(unit.Id),
                 components: new(
                     Rendering.Transform(pos, quaternion.LookRotation(math.normalize(dir), new float3(0, 1, 0))),
-                    Prefab.WithData("Assets/Prefabs/Unit.prefab", unit)
+                    Prefab.WithData("Assets/Prefabs/Unit.prefab", new UnitViewData {
+                            Unit = unit,
+                            Selected = model->SelectedUnit.Test(out var selectedId) && (selectedId == unit.Id)
+                    })
                 ));
         }
 
