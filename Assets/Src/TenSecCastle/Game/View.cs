@@ -83,6 +83,9 @@ namespace TenSecCastle.Game {
 
         private static Obj ViewPlayerUI(GameModel model) {
             if (model.Players.First(&Utils.PlayerIsHuman).Test(out var player)) {
+
+                var moneyText = (S)$"{player.Coins}";
+                
                 return new("PlayerUI",
                     components: new(
                         UI.Canvas(new(renderMode: UI.RenderMode.ScreenSpaceOverlay)),
@@ -110,14 +113,7 @@ namespace TenSecCastle.Game {
                         ),
                         new Obj("TimerPanel",
                             components: new(
-                                UI.RectTransform(/*anchorMin: 0, anchorMax: 0, offsetMin: 0,
-                                    offsetMax: new float2(100,100), pivot: 0,*/0,100,0)
-                                /*UI.ContentSizeFitter(new(verticalFit: UI.FitMode.PreferredSize)),
-                                UI.HorizontalLayoutGroup(new(
-                                    childAlignment: UI.TextAnchor.MiddleCenter,
-                                    padding: 0,
-                                    childControl: true
-                                ))*/
+                                UI.RectTransform(0,100,0)
                             ),
                             children: new(
                                 new Obj("Icon",
@@ -133,9 +129,22 @@ namespace TenSecCastle.Game {
                                             
                                         )),
                                         UI.LayoutElement(new(float2.zero))
-                                    )
+                                    ))
                                 )
-                            ))
+                            ),
+                        new Obj("MoneyPanel",
+                            components: new(
+                                UI.RectTransform(anchorMin: new float2(0.9f,0), anchorMax: new float2(1,0.1f))
+                            ),
+                            children: new(
+                                new Obj("MoneyTexy",
+                                    components: new(
+                                        UI.RectTransform(anchorMin: 0, anchorMax: 1, offsetMin: 0, offsetMax: 0, pivot: 0),
+                                        UI.Text(new UI.TextConfig(text: moneyText, color: Colors.White,bestFit: true))
+                                        
+                                    ))
+                            )
+                        )
                     )
                 );
             }
