@@ -29,6 +29,42 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Icons/1.png
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 759b631c00e496a4eb8f4a630ac129b9
+    m_Address: Assets/Prefabs/Icons/6.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 7e53591d5dfb58d48ad0c24fc924c47a
+    m_Address: Assets/Prefabs/Icons/5.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e341839e9f0a07e46a28bb10c35cd69f
+    m_Address: Assets/Prefabs/Icons/10.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: eab807cd41bc62f40aa75493121af911
+    m_Address: Assets/Prefabs/Icons/9.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c3355c36192e0e746af712f0b37831d2
+    m_Address: Assets/Prefabs/Icons/2.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a9e69a4320f4d5d499bb1a0fcd7a50a4
+    m_Address: Assets/Prefabs/Icons/3.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e223dee1da7539c4bb43931968fec317
+    m_Address: Assets/Prefabs/Icons/7.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b826165c48196384c8935c6d07dd999b
+    m_Address: Assets/Prefabs/Icons/4.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1c3a05b1b18b7dd48b18a44f10b25ce1
+    m_Address: Assets/Prefabs/Icons/8.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3df0c76146cb86c48ab9117db7940a19, type: 2}
   m_SchemaSet:

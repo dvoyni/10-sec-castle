@@ -16,6 +16,7 @@ namespace TenSecCastle.Game {
                 )
                 + ViewPlayerUI(model)
                 + ViewUnits(model)
+                + ViewVictoryUI(model)
             );
         }
 
@@ -56,6 +57,29 @@ namespace TenSecCastle.Game {
                     })
                 ));
         }
+        
+
+        private static Obj ViewVictoryUI(GameModel model) {
+
+            static bool PlayerWithId(Player player, ulong* winnerId) {
+                return player.Id == *winnerId;
+            }
+
+            if (model.Winner.Test(out var winnerId)) {
+                if (model.Players.First(Cf.New<Player,ulong,bool>(&PlayerWithId,winnerId)).Test(out var player)) {
+                    switch (player.Kind) {
+                        case PlayerKind.Human:
+                            Debug.Log("win");
+                            break;
+                        case PlayerKind.AI:
+                            Debug.Log("Lose");
+                            break;
+                    }
+                }
+            }
+
+            return new("VictoryUI");
+        }
 
         private static Obj ViewPlayerUI(GameModel model) {
             if (model.Players.First(&Utils.PlayerIsHuman).Test(out var player)) {
@@ -73,27 +97,80 @@ namespace TenSecCastle.Game {
                     children: new(
                         new Obj("SlotsPanel",
                             components: new(
-                                UI.RectTransform(anchorMin: new(0, 0), anchorMax: new(1, 0), offsetMin: 0, offsetMax: 0),
+                                UI.RectTransform(anchorMin: new(0, 0), anchorMax: new(1, 0), offsetMin: 0, offsetMax: 0,
+                                    pivot: new float2(0.5f, 0)),
                                 UI.ContentSizeFitter(new(verticalFit: UI.FitMode.PreferredSize)),
                                 UI.HorizontalLayoutGroup(new(
                                     childAlignment: UI.TextAnchor.MiddleCenter,
-                                    padding: 12,
+                                    padding: 1,
                                     childControl: true
                                 ))
                             ),
                             children: player.Slots.Map(Cf.New<Slot, GameModel, Obj>(&ViewSlot, model))
-                        )
+                        ),
+                        new Obj("TimerPanel",
+                            components: new(
+                                UI.RectTransform(/*anchorMin: 0, anchorMax: 0, offsetMin: 0,
+                                    offsetMax: new float2(100,100), pivot: 0,*/0,100,0)
+                                /*UI.ContentSizeFitter(new(verticalFit: UI.FitMode.PreferredSize)),
+                                UI.HorizontalLayoutGroup(new(
+                                    childAlignment: UI.TextAnchor.MiddleCenter,
+                                    padding: 0,
+                                    childControl: true
+                                ))*/
+                            ),
+                            children: new(
+                                new Obj("Icon",
+                                    components: new(
+                                        UI.RectTransform(anchorMin: 0, anchorMax: 1, offsetMin: 0,
+                                            offsetMax: 0, pivot: 0),
+                                        UI.Image(new(
+                                            color: Colors.White,
+                                            spriteAddress: (S) $"Assets/Prefabs/Icons/TimerSprite.png",
+                                            fillAmount: model.Timeout / model.Interval,
+                                            fillMethod: UI.FillMethod.Radial360,
+                                            imageType: UI.ImageType.Filled
+                                            
+                                        )),
+                                        UI.LayoutElement(new(float2.zero))
+                                    )
+                                )
+                            ))
                     )
                 );
             }
 
-            return new();
+            return new("PlayerUI");
         }
-
+        
         private static Obj ViewSlot(Slot slot, GameModel* model) {
             static TenSecCastle.Msg OnClick(Key key) {
                 var slotKind = key.GetValue<SlotKind>();
                 return Config.ToMsg(new Msg(MsgKind.SlotClicked) { Slot = slotKind });
+            }
+
+            var h = 1f;
+            var spriteBack = $"Assets/Prefabs/Icons/1.png";
+            var spriteAddress = $"Assets/Prefabs/Icons/{slot.Item.Id}.png";
+            
+            if (slot.SwapProgress < 0.25f) {
+                if (slot.PrevItem.Test(out var prevItem)) {
+                    spriteAddress = $"Assets/Prefabs/Icons/{prevItem.Id}.png";
+                }
+                else {
+                    spriteAddress = spriteBack;
+                }
+
+                h = 1 - slot.SwapProgress * 4;
+            } else if(slot.SwapProgress<0.5f) {
+                spriteAddress = spriteBack;
+                h = (slot.SwapProgress-0.25f) * 4;
+            } else if(slot.SwapProgress<0.75f) {
+                spriteAddress = spriteBack;
+                h = 1 - (slot.SwapProgress-0.5f) * 4;
+            } 
+            else {
+                h = (slot.SwapProgress-0.75f) * 4;
             }
 
             return new Obj($"Slot:{slot.Item.SlotKind}",
@@ -108,8 +185,9 @@ namespace TenSecCastle.Game {
                         components: new(
                             UI.Image(new(
                                 color: Colors.White,
-                                spriteAddress: (S)$"Assets/Prefabs/Icons/1.png" //{slot.Item.Id}
-                            ))
+                                spriteAddress: (S) spriteAddress
+                            )),
+                            UI.LayoutElement(new(preferred: new  float2(180,180*h),layoutPriority:1))
                         )
                     )
                 )
