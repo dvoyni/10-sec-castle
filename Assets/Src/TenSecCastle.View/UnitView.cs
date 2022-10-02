@@ -26,22 +26,34 @@ namespace TenSecCastle.View {
         }
 
       public void Sync(Unit unit) {
-            if (unit.State != _currentState) {
-                _currentState = unit.State;
-                _currentAnimationClip = GetAnimationClipName(_currentState);
-            }
-
-            _currentProgress = _currentState != UnitState.Dieing
-                ? unit.StateProgress
-                : Math.Clamp(unit.StateTime, 0, _deadAnimationTime);
-
-            if (!Equals(string.IsNullOrEmpty(_currentAnimationClip))) {
-                _playerAnimator.speed = 0f;
-                _playerAnimator.Play(_currentAnimationClip, 0, _currentProgress);
-            }
+            UpdateAnimationState(unit);
+            UpdateAnimationProgress(unit);
+            PlayAnimation();
+            
+            //Update
         }
-      
-        private void Init() {
+
+      private void PlayAnimation() {
+          if (!Equals(string.IsNullOrEmpty(_currentAnimationClip))) {
+              _playerAnimator.speed = 0f;
+              _playerAnimator.Play(_currentAnimationClip, 0, _currentProgress);
+          }
+      }
+
+      private void UpdateAnimationProgress(Unit unit) {
+          _currentProgress = _currentState != UnitState.Dieing
+              ? unit.StateProgress
+              : Math.Clamp(unit.StateTime, 0, _deadAnimationTime);
+      }
+
+      private void UpdateAnimationState(Unit unit) {
+          if (unit.State != _currentState) {
+              _currentState = unit.State;
+              _currentAnimationClip = GetAnimationClipName(_currentState);
+          }
+      }
+
+      private void Init() {
             
             var animController = _playerAnimator.runtimeAnimatorController;
             var animaName = GetAnimationClipName(UnitState.Dieing);
