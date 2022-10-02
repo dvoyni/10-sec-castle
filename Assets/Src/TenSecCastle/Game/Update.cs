@@ -25,7 +25,10 @@ namespace TenSecCastle.Game {
                 model.Players.FindIndex(&Utils.PlayerIsHuman).Test(out var playerIndex)
                 && model.Players.At(playerIndex).Test(out var player)) {
                 if (
-                    player.Slots.FindIndex(Cf.New<Slot, SlotKind, bool>(&SlotOfKind, slotKind)).Test(out var slotIndex)
+                    (player.Coins > 0)
+                    && player.Slots
+                            .FindIndex(Cf.New<Slot, SlotKind, bool>(&SlotOfKind, slotKind))
+                            .Test(out var slotIndex)
                     && player.Slots.At(slotIndex).Test(out var slot)
                 ) {
                     var items = Utils.ShuffleItems(model.Items);
@@ -34,6 +37,7 @@ namespace TenSecCastle.Game {
                         slot.SwapProgress = 0;
                         slot.Item = item;
                         player.Slots = player.Slots.Replace(slotIndex, slot);
+                        player.Coins--;
                         model.Players = model.Players.Replace(playerIndex, player);
                     }
                 }
