@@ -101,15 +101,18 @@ namespace TenSecCastle.Game {
                             }
                             break;
                         }
-                        case UnitState.Dieing:
+                        case UnitState.Dieing: {
+                            var len = 2;
                             unit.StateTime += dt;
-                            if (unit.StateTime > 2f) { //Death animation length
+                            unit.StateProgress = unit.StateTime / len;
+                            if (unit.StateTime > len) {
                                 model.Units = model.Units.Remove(i);
                             }
                             else {
                                 model.Units = model.Units.Replace(i, unit);
                             }
                             break;
+                        }
                     }
                 }
             }

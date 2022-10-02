@@ -37,6 +37,9 @@ namespace TenSecCastle.Game {
                 case UnitState.Attacking:
                     dir = new float3(unit.AttackDirection.x, 0, unit.AttackDirection.y);
                     break;
+                case UnitState.Dieing:
+                    pos += new float3(0, -math.max(unit.StateTime - 1, 0) * 0.5f, 0);
+                    break;
             }
             return new Obj($"Unit:{unit.Id}",
                 components: new(
