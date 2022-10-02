@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 namespace TenSecCastle.View {
     public class UnitView : MonoBehaviour, IDataDrivenComponent<Unit> {
         [SerializeField] private Animator _playerAnimator;
+        [SerializeField] private ItemBinding[] Weapons;
 
         private string _currentAnimationClip;
         private float _currentProgress;
@@ -18,6 +19,7 @@ namespace TenSecCastle.View {
         private float _currentAnimationProgress;
         
         private float _deadAnimationTime;
+        private ulong _currentWeaponId;
 
         public IMessenger Messenger { private get; set; }
 
@@ -29,9 +31,28 @@ namespace TenSecCastle.View {
             UpdateAnimationState(unit);
             UpdateAnimationProgress(unit);
             PlayAnimation();
-            
-            //Update
-        }
+
+            UpdateWeapon(unit);
+      }
+
+      [Serializable]
+      private struct ItemBinding {
+          public ulong Id;
+          public GameObject Obj;
+      }
+      private void UpdateWeapon() {
+         
+      }
+
+      private void UpdateWeapon(Unit unit) {
+          if (unit.WeaponId != _currentWeaponId) {
+              _currentWeaponId = unit.WeaponId;
+
+              for (int i = 0; i < Weapons.Length; i++) {
+                  Weapons[i].Obj.SetActive(_currentWeaponId==Weapons[i].Id);
+              }
+          }
+      }
 
       private void PlayAnimation() {
           if (!Equals(string.IsNullOrEmpty(_currentAnimationClip))) {
