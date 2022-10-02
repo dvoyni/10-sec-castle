@@ -12,6 +12,10 @@ namespace TenSecCastle.Game {
                     return GameLogic.UpdateTick(model, msg.DeltaTime);
                 case MsgKind.SlotClicked:
                     return RerollSlot(model, msg.Slot);
+                case MsgKind.Restart:
+                    return (Utils.NewModel, new());
+                case MsgKind.UnitClicked:
+                    return (new GameModel(model) { SelectedUnit = msg.Id }, new());
             }
             throw new NotImplementedException("Message is not handled");
         }

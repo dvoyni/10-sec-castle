@@ -3,25 +3,47 @@ using Rondo.Core.Extras;
 using Rondo.Core.Lib;
 using Rondo.Core.Lib.Containers;
 using Rondo.Core.Lib.Platform;
-using Rondo.Unity.Utils;
 using TenSecCastle.Model;
 using Unity.Mathematics;
 
 namespace TenSecCastle.Game {
     public static unsafe class GameLogic {
         public static (GameModel, L<Cmd<Msg>>) UpdateTick(GameModel model, float dt) {
-            model.Timeout -= dt;
-            model = UpdateUnits(model, dt);
+            model = CheckGameEnd(model);
 
-            if (model.Timeout <= 0) {
-                model = AI(model);
-                model = SpawnUnit(model);
-                model.Timeout += model.Interval;
+            if (!model.Winner.Test(out _)) {
+                model.Timeout -= dt;
+                model = UpdateUnits(model, dt);
+
+                if (model.Timeout <= 0) {
+                    model = AI(model);
+                    model = SpawnUnit(model);
+                    model.Timeout += model.Interval;
+                }
+
+                model = UpdateSlots(model, dt);
             }
 
-            model = UpdateSlots(model, dt);
-
             return (model, new());
+        }
+
+        private static GameModel CheckGameEnd(GameModel model) {
+            static bool IsCastleDestroyed(Player player) {
+                return player.CastleHitPoints <= 0;
+            }
+
+            if (model.Winner.Test(out _)) {
+                return model;
+            }
+
+            if (model.Players.First(&IsCastleDestroyed).Test(out var looser)) {
+                if (model.Players.First(PlayerIdNotEq(looser.Id)).Test(out var winner)) {
+                    model.Winner = Maybe<ulong>.Just(winner.Id);
+                    model.SelectedUnit = Maybe<ulong>.Nothing;
+                }
+            }
+
+            return model;
         }
 
         private static GameModel UpdateSlots(GameModel model, float dt) {
@@ -39,6 +61,14 @@ namespace TenSecCastle.Game {
             return model;
         }
 
+        private static Cf<Player, bool> PlayerIdNotEq(ulong id) {
+            static bool Impl(Player player, ulong* id) {
+                return player.Id != *id;
+            }
+
+            return Cf.New<Player, ulong, bool>(&Impl, id);
+        }
+
         private static GameModel UpdateUnits(GameModel model, float dt) {
             for (var i = model.Units.Length() - 1; i >= 0; i--) {
                 if (model.Units.At(i).Test(out var unit)) {
@@ -52,7 +82,13 @@ namespace TenSecCastle.Game {
                     switch (unit.State) {
                         case UnitState.Idle: {
                             if (!InBounds(unit.Cell + unit.MoveDirection, model.FieldSize, model.MoveAxis)) {
-                                Debug.Log("hit castle");
+                                if (
+                                    model.Players.FindIndex(PlayerIdNotEq(unit.Owner)).Test(out var playerIndex)
+                                    && model.Players.At(playerIndex).Test(out var player)
+                                ) {
+                                    player.CastleHitPoints--;
+                                    model.Players = model.Players.Replace(playerIndex, player);
+                                }
                                 unit.State = UnitState.Dieing;
                                 unit.StateTime = 0;
                                 unit.StateProgress = 0;

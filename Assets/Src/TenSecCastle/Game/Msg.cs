@@ -1,3 +1,4 @@
+using Rondo.Core.Lib.Containers;
 using TenSecCastle.Model;
 
 namespace TenSecCastle.Game {
@@ -9,10 +10,13 @@ namespace TenSecCastle.Game {
         public readonly MsgKind Kind;
         public float DeltaTime;
         public SlotKind Slot;
+        public Maybe<ulong> Id;
     }
 
     public enum MsgKind {
         Tick,
-        SlotClicked
+        SlotClicked,
+        Restart,
+        UnitClicked,
     }
 }

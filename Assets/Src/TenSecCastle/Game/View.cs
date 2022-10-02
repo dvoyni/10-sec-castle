@@ -46,6 +46,7 @@ namespace TenSecCastle.Game {
                     break;
             }
             return new Obj($"Unit:{unit.Id}",
+                key: Key.New(unit.Id),
                 components: new(
                     Rendering.Transform(pos, quaternion.LookRotation(math.normalize(dir), new float3(0, 1, 0))),
                     Prefab.WithData("Assets/Prefabs/Unit.prefab", unit)

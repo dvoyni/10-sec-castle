@@ -19,6 +19,8 @@ namespace TenSecCastle.Model {
         public L<Unit> Units;
         public float Timeout;
         public ulong LastUnitId;
+        public Maybe<ulong> Winner;
+        public Maybe<ulong> SelectedUnit;
     }
 
     public struct Player {
@@ -29,6 +31,7 @@ namespace TenSecCastle.Model {
         public int2 SpawnDirection;
         public L<int2> SpawnPoints;
         public int CurrentSpawnPoint;
+        public int CastleHitPoints;
     }
 
     public enum PlayerKind {

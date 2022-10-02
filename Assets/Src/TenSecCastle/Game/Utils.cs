@@ -2,6 +2,7 @@
 using Rondo.Core.Lib;
 using Rondo.Core.Lib.Containers;
 using TenSecCastle.Model;
+using Unity.Mathematics;
 using Random = Unity.Mathematics.Random;
 
 namespace TenSecCastle.Game {
@@ -26,6 +27,45 @@ namespace TenSecCastle.Game {
             return items.SortWith(
                 Cf.New<Item, Item, Random, int>(&RandComp, new Random((uint)DateTime.Now.ToFileTime()))
             );
+        }
+
+        public static GameModel NewModel {
+            get {
+                var model = new GameModel {
+                        Items = GameConfig.Items,
+                        BasicUnit = GameConfig.BasicUnit,
+                        FieldSize = new int2(2, 14),
+                        Interval = 5,
+                        BaseIncome = 1,
+                        MoveAxis = new int2(0, 1),
+                        Timeout = 2,
+                };
+                model.Players = new(
+                    new Player {
+                            Id = 1,
+                            Kind = PlayerKind.Human,
+                            Slots = GameLogic.ShuffleSlots(model),
+                            SpawnDirection = new int2(0, 1),
+                            SpawnPoints = new L<int2>(
+                                new int2(-1, 0),
+                                new(model.FieldSize.x, 0)
+                            ),
+                            CastleHitPoints = 20,
+                    },
+                    new Player {
+                            Id = 2,
+                            Kind = PlayerKind.AI,
+                            Slots = GameLogic.ShuffleSlots(model),
+                            SpawnDirection = new int2(0, -1),
+                            SpawnPoints = new L<int2>(
+                                new int2(-1, model.FieldSize.y - 1),
+                                new(model.FieldSize.x, model.FieldSize.y - 1)
+                            ),
+                            CastleHitPoints = 20,
+                    }
+                );
+                return model;
+            }
         }
     }
 }
