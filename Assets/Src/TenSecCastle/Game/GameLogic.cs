@@ -301,7 +301,7 @@ namespace TenSecCastle.Game {
             }
 
             static Player Reset(Player player, GameModel* model) {
-                player.Slots = ShuffleSlots(*model);
+                //player.Slots = ShuffleSlots(*model);
                 player.Coins += model->BaseIncome;
                 return player;
             }

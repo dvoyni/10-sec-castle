@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6882063880294770569}
   - component: {fileID: -3519484665141150393}
+  - component: {fileID: 4554311213404089146}
   m_Layer: 0
   m_Name: UnitView
   m_TagString: Untagged
@@ -55,6 +56,20 @@ MonoBehaviour:
     Obj: {fileID: 2950935570632313562}
   - Id: 4
     Obj: {fileID: 8135433517284827522}
+--- !u!136 &4554311213404089146
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145576493471044866}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.35
+  m_Height: 1.75
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!1001 &2167709182862612754
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -126,7 +141,8 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2813238219152687067, guid: 1c4f474c5a4b69b4ca49208a7bd74cb9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1c4f474c5a4b69b4ca49208a7bd74cb9, type: 3}
 --- !u!4 &2163234197599184018 stripped
 Transform:
