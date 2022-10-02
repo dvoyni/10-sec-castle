@@ -8,7 +8,7 @@ namespace TenSecCastle.Game {
                 var list = new L<Item>();
 
                 list += new Item {
-                    Id = 0,
+                    Id = 1,
                     SlotKind = SlotKind.Weapon,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Weapon, Value = 15.00f, AttackType = AttackType.Physical, AttackRange = AttackRange.Melee}
@@ -16,7 +16,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 1,
+                    Id = 2,
                     SlotKind = SlotKind.Weapon,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Weapon, Value = 10.00f, AttackType = AttackType.Physical, AttackRange = AttackRange.Ranged}
@@ -24,7 +24,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 2,
+                    Id = 3,
                     SlotKind = SlotKind.Weapon,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Weapon, Value = 15.00f, AttackType = AttackType.Magical, AttackRange = AttackRange.Ranged}
@@ -32,7 +32,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 3,
+                    Id = 4,
                     SlotKind = SlotKind.Weapon,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Defense, Value = 3.50f, AttackType = AttackType.Magical, AttackRange = AttackRange.None},
@@ -41,7 +41,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 4,
+                    Id = 5,
                     SlotKind = SlotKind.Armor,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Defense, Value = 5.00f, AttackType = AttackType.Physical, AttackRange = AttackRange.None}
@@ -49,7 +49,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 5,
+                    Id = 6,
                     SlotKind = SlotKind.Armor,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Defense, Value = 5.00f, AttackType = AttackType.Magical, AttackRange = AttackRange.None}
@@ -57,7 +57,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 6,
+                    Id = 7,
                     SlotKind = SlotKind.Armor,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Defense, Value = 2.00f, AttackType = AttackType.Magical, AttackRange = AttackRange.None},
@@ -66,7 +66,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 7,
+                    Id = 8,
                     SlotKind = SlotKind.Armor,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Attack, Value = 10.00f, AttackType = AttackType.Physical, AttackRange = AttackRange.None}
@@ -74,7 +74,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 8,
+                    Id = 9,
                     SlotKind = SlotKind.Armor,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Attack, Value = 10.00f, AttackType = AttackType.Magical, AttackRange = AttackRange.None}
@@ -82,7 +82,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 9,
+                    Id = 10,
                     SlotKind = SlotKind.Armor,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.HitPoints, Value = 50.00f, AttackType = AttackType.None, AttackRange = AttackRange.None}
@@ -90,7 +90,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 10,
+                    Id = 11,
                     SlotKind = SlotKind.Jewelry,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Attack, Value = 3.00f, AttackType = AttackType.Physical, AttackRange = AttackRange.None},
@@ -99,7 +99,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 11,
+                    Id = 12,
                     SlotKind = SlotKind.Jewelry,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.HitPointRegen, Value = 1.00f, AttackType = AttackType.None, AttackRange = AttackRange.None}
@@ -107,7 +107,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 12,
+                    Id = 13,
                     SlotKind = SlotKind.Jewelry,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.Income, Value = 1.00f, AttackType = AttackType.None, AttackRange = AttackRange.None}
@@ -115,7 +115,7 @@ namespace TenSecCastle.Game {
                 };
 
                 list += new Item {
-                    Id = 13,
+                    Id = 14,
                     SlotKind = SlotKind.Jewelry,
                     Attributes = new(
                         new Attribute { Kind = AttributeKind.HitPoints, Value = 25.00f, AttackType = AttackType.None, AttackRange = AttackRange.None}
