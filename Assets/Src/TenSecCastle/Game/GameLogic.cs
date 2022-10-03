@@ -70,6 +70,14 @@ namespace TenSecCastle.Game {
             return Cf.New<Player, ulong, bool>(&Impl, id);
         }
 
+        private static Cf<Player, bool> PlayerIdEq(ulong id) {
+            static bool Impl(Player player, ulong* id) {
+                return player.Id == *id;
+            }
+
+            return Cf.New<Player, ulong, bool>(&Impl, id);
+        }
+
         private static GameModel UpdateUnits(GameModel model, float dt) {
             for (var i = model.Units.Length() - 1; i >= 0; i--) {
                 if (model.Units.At(i).Test(out var unit)) {
@@ -108,6 +116,16 @@ namespace TenSecCastle.Game {
                                 ) {
                                     target.HitPoints -= CalculateDamage(unit, target);
                                     model.Units = model.Units.Replace(targetIndex, target);
+
+                                    if (target.HitPoints == 0) {
+                                        if (
+                                            model.Players.FindIndex(PlayerIdEq(unit.Owner)).Test(out var playerIndex)
+                                            && model.Players.At(playerIndex).Test(out var player)
+                                        ) {
+                                            player.Coins += unit.Income;
+                                            model.Players = model.Players.Replace(playerIndex, player);
+                                        }
+                                    }
                                 }
                             }
                             else if (FindCellToMove(model, unit).Test(out var cell)) {
