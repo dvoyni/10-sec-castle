@@ -24,12 +24,17 @@ public static class Helpers {
 
         var charactersCSV = DownloadCSV("1hnbstt53_ZFGjA758OczVS4CTnIyeLhBmcRXxcmRi10", "157130821");
         await charactersCSV;
+        
+        var descriptionsCSV = DownloadCSV("1hnbstt53_ZFGjA758OczVS4CTnIyeLhBmcRXxcmRi10", "2084636023");
+        await descriptionsCSV;
 
         Debug.Log("...Data loaded...");
 
         var itemsData = ParseCSV(itemsCSV.Result);
 
         var charactersData = ParseCSV(charactersCSV.Result);
+        
+        var descriptions = ParseCSV(descriptionsCSV.Result);
 
         Debug.Log("...Parse data...");
 
@@ -37,6 +42,7 @@ public static class Helpers {
 
         Debug.Log("File successfully created!");
     }
+    
 
     private static void CreateFile(string path, Dictionary<int, List<string>> itemsData, Dictionary<int, List<string>> charactersData) {
         string copyPath = $"Assets/{path}/GameConfig.cs";

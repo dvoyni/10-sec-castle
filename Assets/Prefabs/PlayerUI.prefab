@@ -5096,6 +5096,11 @@ MonoBehaviour:
   - Id: 2
     Img: {fileID: 1457614208772658982}
     Btn: {fileID: 8839163873550408764}
+  _moneyText: {fileID: 3751002179658639599}
+  _spawnText: {fileID: 2610831558335474128}
+  _spawnUnitFillImage: {fileID: 3734913510682707095}
+  _playerHPFillImage: {fileID: 9077865487557757676}
+  _enemyHPFillImage: {fileID: 891011202956708147}
 --- !u!1 &6613238398165966185
 GameObject:
   m_ObjectHideFlags: 0
