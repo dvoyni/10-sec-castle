@@ -184,6 +184,14 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 194516835916447760, guid: 1c4f474c5a4b69b4ca49208a7bd74cb9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 718535953338227370, guid: 1c4f474c5a4b69b4ca49208a7bd74cb9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.419
+      objectReference: {fileID: 0}
     - target: {fileID: 896489882159379626, guid: 1c4f474c5a4b69b4ca49208a7bd74cb9, type: 3}
       propertyPath: m_IsActive
       value: 0

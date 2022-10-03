@@ -39,10 +39,10 @@ namespace TenSecCastle.Game {
                         Items = GameConfig.Items,
                         BasicUnit = GameConfig.BasicUnit,
                         FieldSize = new int2(2, 14),
-                        Interval = 5,
+                        Interval = 10,
                         BaseIncome = 1,
                         MoveAxis = new int2(0, 1),
-                        Timeout = 2,
+                        Timeout = 5,
                 };
                 model.Players = new(
                     new Player {
@@ -55,6 +55,7 @@ namespace TenSecCastle.Game {
                                 new(model.FieldSize.x, 0)
                             ),
                             CastleHitPoints = 20,
+                            Coins = 3
                     },
                     new Player {
                             Id = 2,
@@ -66,6 +67,7 @@ namespace TenSecCastle.Game {
                                 new(model.FieldSize.x, model.FieldSize.y - 1)
                             ),
                             CastleHitPoints = 20,
+                            Coins = 3
                     }
                 );
                 return model;

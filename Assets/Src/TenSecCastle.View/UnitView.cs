@@ -54,6 +54,8 @@ namespace TenSecCastle.View {
             UpdateWeapon(unit);
             UpdateArmor(unit);
             UpdateAuras(unit);
+            _arrow.SetActive(unitViewData.SelectedUnitId);
+            
         }
 
         private void UpdateAuras(Unit unit) {
