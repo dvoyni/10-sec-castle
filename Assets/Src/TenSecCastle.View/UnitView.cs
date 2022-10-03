@@ -8,8 +8,23 @@ using Random = UnityEngine.Random;
 
 namespace TenSecCastle.View {
     public class UnitView : MonoBehaviour, IDataDrivenComponent<UnitViewData> {
+        [Serializable]
+        private struct ItemBinding {
+            public ulong Id;
+            public GameObject Obj;
+        }
+        
+        [Serializable]
+        private struct ArmorSetBinding {
+            public ulong Id;
+            public GameObject[] Obj;
+            
+        }
+        
         [SerializeField] private Animator _playerAnimator;
         [SerializeField] private ItemBinding[] Weapons;
+        [SerializeField] private ItemBinding[] Auras;
+        [SerializeField] private ArmorSetBinding[] Items;
 
         private string _currentAnimationClip;
         private float _currentProgress;
@@ -20,6 +35,8 @@ namespace TenSecCastle.View {
 
         private float _deadAnimationTime;
         private ulong _currentWeaponId;
+        private ulong _currentArmorId;
+        private ulong _currentAuraId;
 
         public IMessenger Messenger { private get; set; }
 
@@ -34,15 +51,31 @@ namespace TenSecCastle.View {
             PlayAnimation();
 
             UpdateWeapon(unit);
+            UpdateArmor(unit);
+            UpdateAuras(unit);
         }
 
-        [Serializable]
-        private struct ItemBinding {
-            public ulong Id;
-            public GameObject Obj;
+        private void UpdateAuras(Unit unit) {
+            if (unit.JewelryId != _currentAuraId) {
+                _currentAuraId = unit.ArmorId;
+
+                for (int i = 0; i < Auras.Length; i++) {
+                    Auras[i].Obj.SetActive(_currentAuraId == Auras[i].Id);
+                }
+            }
         }
 
-        private void UpdateWeapon() { }
+        private void UpdateArmor(Unit unit) {
+            if (unit.ArmorId != _currentArmorId) {
+                _currentArmorId = unit.ArmorId;
+
+                for (int i = 0; i < Items.Length; i++) {
+                    for (int j = 0; j < Items[i].Obj.Length; j++) {
+                        Items[i].Obj[j].SetActive(_currentArmorId == Items[i].Id);
+                    }
+                }
+            }
+        }
 
         private void UpdateWeapon(Unit unit) {
             if (unit.WeaponId != _currentWeaponId) {

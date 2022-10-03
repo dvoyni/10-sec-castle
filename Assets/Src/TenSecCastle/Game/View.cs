@@ -16,8 +16,6 @@ namespace TenSecCastle.Game {
                 )
                 + ViewPlayerUI(model)
                 + ViewUnits(model)
-               
-                
             );
         }
 
@@ -106,10 +104,6 @@ namespace TenSecCastle.Game {
                         MaxTimeToSpawn = model.Interval
                     })
                 ));
-           
         }
-        
-        
-        
     }
 }

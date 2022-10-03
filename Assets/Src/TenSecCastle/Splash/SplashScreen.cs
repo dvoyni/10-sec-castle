@@ -40,7 +40,7 @@ namespace TenSecCastle.Splash {
                             color: Colors.White,
                             text: text,
                             fontSize: n < 1 ? 64 : 48,
-                            fontAddress: (S)"Assets/Data/Alkalami-Regular.ttf"
+                            fontAddress: (S)"Assets/Data/Font/AdLibRg.ttf"
                         ))
                     )
                 );
@@ -88,7 +88,7 @@ namespace TenSecCastle.Splash {
                                             color: Colors.White,
                                             text: (S)"Start",
                                             fontSize: 64,
-                                            fontAddress: (S)"Assets/Data/Alkalami-Regular.ttf"
+                                            fontAddress: (S)"Assets/Data/Font/AdLibRg.ttf"
                                         ))
                                     )
                                 )
