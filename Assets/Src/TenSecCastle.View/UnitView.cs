@@ -102,9 +102,10 @@ namespace TenSecCastle.View {
         }
 
         private void UpdateAnimationState(Unit unit) {
+            
             if (unit.State != _currentState) {
                 _currentState = unit.State;
-                _currentAnimationClip = GetAnimationClipName(_currentState);
+                _currentAnimationClip = GetAnimationClipName(_currentState,unit.WeaponId);
             }
         }
 
@@ -118,14 +119,18 @@ namespace TenSecCastle.View {
                 throw new Exception("Can't find animation");
         }
 
-        private string GetAnimationClipName(UnitState unitState) {
+        private string GetAnimationClipName(UnitState unitState, ulong? weaponId=null) {
             switch (unitState) {
                 case UnitState.Moving:
                     return "Male_Sword_Walk";
                 case UnitState.Idle:
                     return "Male Sword Stance";
                 case UnitState.Attacking:
-                    return $"Male Attack {Random.Range(1, 4)}";
+                    return weaponId switch {
+                        1 => $"Male Attack 1",
+                        2 => $"shotgun_fire",
+                        _ => $"Male Attack 2"
+                    };
                 case UnitState.Dieing:
                     return "Male Sword Die";
             }
