@@ -20,7 +20,7 @@ namespace TenSecCastle.Model {
         public float Timeout;
         public ulong LastUnitId;
         public Maybe<ulong> Winner;
-        public Maybe<ulong> SelectedUnit;
+        public Maybe<ulong> SelectedUnitID;
     }
 
     public struct Player {

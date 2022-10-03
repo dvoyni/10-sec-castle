@@ -10,6 +10,10 @@ namespace TenSecCastle.Game {
         public static bool PlayerIsHuman(Player player) {
             return player.Kind == PlayerKind.Human;
         }
+        
+        public static bool PlayerIsAI(Player player) {
+            return player.Kind == PlayerKind.AI;
+        }
 
         public static unsafe Maybe<Item> FirstItemWithSlot(L<Item> items, SlotKind slot) {
             static bool WithSlot(Item a, SlotKind* slot) {

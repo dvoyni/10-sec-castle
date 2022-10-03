@@ -39,7 +39,7 @@ namespace TenSecCastle.Game {
             if (model.Players.First(&IsCastleDestroyed).Test(out var looser)) {
                 if (model.Players.First(PlayerIdNotEq(looser.Id)).Test(out var winner)) {
                     model.Winner = Maybe<ulong>.Just(winner.Id);
-                    model.SelectedUnit = Maybe<ulong>.Nothing;
+                    model.SelectedUnitID = Maybe<ulong>.Nothing;
                 }
             }
 

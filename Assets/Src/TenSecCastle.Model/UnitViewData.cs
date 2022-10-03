@@ -4,10 +4,10 @@ using TenSecCastle.Model;
 namespace TenSecCastle.View {
     public struct UnitViewData : IEquatable<UnitViewData> {
         public Unit Unit;
-        public bool Selected;
+        public bool SelectedUnitId;
 
         public bool Equals(UnitViewData other) {
-            return Unit.Equals(other.Unit) && Selected == other.Selected;
+            return Unit.Equals(other.Unit) && SelectedUnitId == other.SelectedUnitId;
         }
 
         public override bool Equals(object obj) {
@@ -15,7 +15,7 @@ namespace TenSecCastle.View {
         }
 
         public override int GetHashCode() {
-            return HashCode.Combine(Unit, Selected);
+            return HashCode.Combine(Unit, SelectedUnitId);
         }
     }
 }

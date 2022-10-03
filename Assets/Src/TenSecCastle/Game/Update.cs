@@ -15,7 +15,7 @@ namespace TenSecCastle.Game {
                 case MsgKind.Restart:
                     return (Utils.NewModel, new());
                 case MsgKind.UnitClicked:
-                    return (new GameModel(model) { SelectedUnit = msg.Id }, new());
+                    return (new GameModel(model) { SelectedUnitID = msg.Id }, new());
             }
             throw new NotImplementedException("Message is not handled");
         }
