@@ -38,22 +38,38 @@ public static class Helpers {
 
         Debug.Log("...Parse data...");
 
-        CreateFile("Src/TenSecCastle/Game", itemsData, charactersData);
-
+        CreateFile("Src/TenSecCastle.Model", itemsData, charactersData,descriptions);
+        
         Debug.Log("File successfully created!");
     }
     
 
-    private static void CreateFile(string path, Dictionary<int, List<string>> itemsData, Dictionary<int, List<string>> charactersData) {
+    private static void CreateFile(string path, Dictionary<int, List<string>> itemsData, Dictionary<int, List<string>> charactersData, Dictionary<int, List<string>> descriptions) {
         string copyPath = $"Assets/{path}/GameConfig.cs";
         Debug.Log("Creating Classfile: " + copyPath);
 
         using (StreamWriter outfile = new StreamWriter(copyPath)) {
+            outfile.WriteLine("using System.Collections.Generic;");
             outfile.WriteLine("using Rondo.Core.Lib.Containers;");
             outfile.WriteLine("using TenSecCastle.Model;");
             outfile.WriteLine("");
             outfile.WriteLine("namespace TenSecCastle.Game {");
             outfile.WriteLine("    public class GameConfig {");
+            
+            
+            outfile.WriteLine("public struct Info {");
+            outfile.WriteLine(" public string Name;");
+            outfile.WriteLine(" public string DescriptionFirst;");
+            outfile.WriteLine("public string DescriptionSecond;");
+            outfile.WriteLine(" }");
+
+            outfile.WriteLine("public static Dictionary<ulong, Info> ItemsDescriptions = new Dictionary<ulong, Info>() {");
+            for (int i = 1; i < descriptions.Count+1; i++) {
+                outfile.WriteLine($"{{{(i)}, new Info() {{Name = \"{descriptions[i][0]}\", DescriptionFirst = \"{(descriptions[i][1].Contains("none")?"":descriptions[i][1])}\", DescriptionSecond = \"{(descriptions[i][2].Contains("none")?"":descriptions[i][2])}\"}}}},");
+            }
+            outfile.WriteLine("};");
+            
+            
             outfile.WriteLine("        public static L<Item> Items {");
             outfile.WriteLine("            get {");
             outfile.WriteLine("                var list = new L<Item>();");

@@ -3954,10 +3954,10 @@ RectTransform:
   m_Father: {fileID: 8769896477472409876}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 203.27182, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 203.27182, y: -425.37592}
+  m_SizeDelta: {x: 405.17035, y: 154.07317}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1622804603845986043
 MonoBehaviour:
@@ -4011,10 +4011,10 @@ RectTransform:
   m_Father: {fileID: 8769896477472409876}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 203.27182, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 203.27182, y: -251.20624}
+  m_SizeDelta: {x: 405.17035, y: 154.07317}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5682928601971880339
 MonoBehaviour:
@@ -5090,17 +5090,25 @@ MonoBehaviour:
   - Id: 1
     Img: {fileID: 8703507455232734906}
     Btn: {fileID: 6708636931279840679}
+    DiscFirst: {fileID: 7068064080170012448}
+    DiscSecond: {fileID: 3418163339820520962}
   - Id: 0
     Img: {fileID: 5356691670939626348}
     Btn: {fileID: 2905917532077088843}
+    DiscFirst: {fileID: 3663277163566695598}
+    DiscSecond: {fileID: 2105852614851861904}
   - Id: 2
     Img: {fileID: 1457614208772658982}
     Btn: {fileID: 8839163873550408764}
+    DiscFirst: {fileID: 2442549486476578660}
+    DiscSecond: {fileID: 1040669872238188671}
   _moneyText: {fileID: 3751002179658639599}
   _spawnText: {fileID: 2610831558335474128}
   _spawnUnitFillImage: {fileID: 3734913510682707095}
   _playerHPFillImage: {fileID: 9077865487557757676}
   _enemyHPFillImage: {fileID: 891011202956708147}
+  _infoWindow: {fileID: 8151596808526793142}
+  _infoWindowCloseButton: {fileID: 6692189348342896606}
 --- !u!1 &6613238398165966185
 GameObject:
   m_ObjectHideFlags: 0
@@ -6369,10 +6377,10 @@ RectTransform:
   m_Father: {fileID: 8769896477472409876}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 203.27182, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 203.27182, y: -77.03658}
+  m_SizeDelta: {x: 405.17035, y: 154.07317}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4381955659476940316
 MonoBehaviour:
@@ -6538,7 +6546,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8945892596281642742
 RectTransform:
   m_ObjectHideFlags: 0
