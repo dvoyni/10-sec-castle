@@ -40,15 +40,18 @@ namespace TenSecCastle.Game {
                             .Test(out var slotIndex)
                     && player.Slots.At(slotIndex).Test(out var slot)
                 ) {
-                    var items = Utils.ShuffleItems(model.Items);
-                    if (Utils.FirstItemWithSlot(items, slotKind).Test(out var item)) {
-                        slot.PrevItem = Maybe<Item>.Just(slot.Item);
-                        slot.SwapProgress = 0;
-                        slot.Item = item;
-                        player.Slots = player.Slots.Replace(slotIndex, slot);
-                        player.Coins--;
-                        model.Players = model.Players.Replace(playerIndex, player);
+                    var prevItem = slot.Item.Id;
+                    while (prevItem == slot.Item.Id) {
+                        var items = Utils.ShuffleItems(model.Items);
+                        if (Utils.FirstItemWithSlot(items, slotKind).Test(out var item)) {
+                            slot.PrevItem = Maybe<Item>.Just(slot.Item);
+                            slot.SwapProgress = 0;
+                            slot.Item = item;
+                        }
                     }
+                    player.Slots = player.Slots.Replace(slotIndex, slot);
+                    player.Coins--;
+                    model.Players = model.Players.Replace(playerIndex, player);
                 }
             }
 

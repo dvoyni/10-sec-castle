@@ -116,12 +116,12 @@ namespace TenSecCastle.View {
                 while (e.MoveNext()) {
                     var id = e.Current;
                     var aop = Addressables.LoadAssetAsync<Sprite>($"Assets/Data/Icons/{id}.png");
-                    var j = i;
+                    var slot = _unitSlots[i];
                     aop.Completed += op => {
-                        _unitSlots[j].Img.sprite = op.Result;
-                        _unitSlots[j].DiscFirst.text = GameConfig.ItemsDescriptions[id].DescriptionFirst;
-                        _unitSlots[j].DiscSecond.text = GameConfig.ItemsDescriptions[id].DescriptionSecond;
-                        _unitSlots[j].Name.text = GameConfig.ItemsDescriptions[id].Name;
+                        slot.Img.sprite = op.Result;
+                        slot.DiscFirst.text = GameConfig.ItemsDescriptions[id].DescriptionFirst;
+                        slot.DiscSecond.text = GameConfig.ItemsDescriptions[id].DescriptionSecond;
+                        slot.Name.text = GameConfig.ItemsDescriptions[id].Name;
                     };
                     i++;
                 }

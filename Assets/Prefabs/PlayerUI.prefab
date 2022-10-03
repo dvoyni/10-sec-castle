@@ -1329,7 +1329,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enemy castle
+  m_text: Enemy's castle
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b191816d7d505d34da5f8a705c628830, type: 2}
   m_sharedMaterial: {fileID: 7999897288736859540, guid: b191816d7d505d34da5f8a705c628830, type: 2}
@@ -1811,7 +1811,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Player castle
+  m_text: Player's castle
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b191816d7d505d34da5f8a705c628830, type: 2}
   m_sharedMaterial: {fileID: 7999897288736859540, guid: b191816d7d505d34da5f8a705c628830, type: 2}

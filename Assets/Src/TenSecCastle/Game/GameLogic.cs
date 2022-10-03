@@ -353,7 +353,10 @@ namespace TenSecCastle.Game {
 
             var items = Utils.ShuffleItems(model.Items);
 
-            return new L<Maybe<Item>>(Utils.FirstItemWithSlot(items, SlotKind.Weapon), Utils.FirstItemWithSlot(items, SlotKind.Armor), Utils.FirstItemWithSlot(items, SlotKind.Jewelry)
+            return new L<Maybe<Item>>(
+                Utils.FirstItemWithSlot(items, SlotKind.Weapon),
+                Utils.FirstItemWithSlot(items, SlotKind.Armor),
+                Utils.FirstItemWithSlot(items, SlotKind.Jewelry)
             ).Map(&ToSlot);
         }
 

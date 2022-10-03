@@ -84,10 +84,7 @@ namespace TenSecCastle.Game {
 
             if (model.SelectedUnitID.Test(out var userId)) {
                 if (model.Units.First(Cf.New<Unit, ulong, bool>(&UnitIsSelected, userId)).Test(out var unitValue)) {
-                    var items = new L<ulong>();
-                    items += unitValue.ArmorId;
-                    items += unitValue.WeaponId;
-                    items += unitValue.JewelryId;
+                    var items = new L<ulong>(unitValue.WeaponId, unitValue.ArmorId, unitValue.JewelryId);
                     selectedUnitSlots = Maybe<L<ulong>>.Just(items);
                 }
             }
