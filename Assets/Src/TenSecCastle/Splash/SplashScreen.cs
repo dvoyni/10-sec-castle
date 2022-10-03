@@ -18,75 +18,72 @@ namespace TenSecCastle.Splash {
             return (new(), new());
         }
 
+        private static readonly ObjRef _buttonRef = ObjRef.New();
+
         public static Obj View(SplashModel model) {
-            var info = new L<S>(
-                (S)"10 Sec Castle",
-                (S)"",
-                (S)"Objective: Destroy enemy castle.",
-                (S)"Every 10 seconds your unit is spawned with chosen equipment.",
-                (S)"To change equipment click on the slot.",
-                (S)"Click on unit to get info about its equipment.",
-                (S)"GLHF, Ludum Dare 51",
-                (S)""
-            );
-
-            static Obj ViewText(int n, S text) {
-                return new Obj($"Line:{n}",
-                    components: new(
-                        UI.Text(new(
-                            color: Colors.White,
-                            text: text,
-                            fontSize: n < 1 ? 64 : 48,
-                            fontAddress: (S)"Assets/Data/Font/AdLibRg.ttf"
-                        ))
-                    )
-                );
-            }
-
             static Msg OnButtonClick(Key key) {
                 return Config.ToMsg(new SplashMsg { Proceed = true });
             }
 
-            return new Obj("SplashScreen",
-                components: new(
-                    UI.Canvas(new(renderMode: UI.RenderMode.ScreenSpaceOverlay)),
-                    UI.CanvasScaler(new(
-                        uiScaleMode: UI.ScaleMode.ScaleWithScreenSize,
-                        referenceResolution: new float2(2560, 1440),
-                        screenMatchMode: UI.ScreenMatchMode.MatchWidthOrHeight,
-                        matchWidthOrHeight: 0.5f
-                    )),
-                    UI.GraphicsRaycaster(new(blockingObjects: UI.BlockingObjects.All))
-                ),
+            return new Obj("SplashScreenRoot",
                 children: new(
-                    new Obj("Panel",
+                    new Obj("Scene",
                         components: new(
-                            UI.ContentSizeFitter(new(UI.FitMode.PreferredSize, UI.FitMode.PreferredSize)),
-                            UI.VerticalLayoutGroup(new(
-                                childControl: true, padding: 64, spacing: 8, childExpand: new(true, false)
+                            Prefab.Static("Assets/Prefabs/Environment_menu.prefab")
+                        )
+                    ),
+                    new Obj("SplashScreen",
+                        components: new(
+                            UI.Canvas(new(renderMode: UI.RenderMode.ScreenSpaceOverlay)),
+                            UI.CanvasScaler(new(
+                                uiScaleMode: UI.ScaleMode.ScaleWithScreenSize,
+                                referenceResolution: new float2(2560, 1440),
+                                screenMatchMode: UI.ScreenMatchMode.MatchWidthOrHeight,
+                                matchWidthOrHeight: 0.5f
                             )),
-                            UI.Image(new(color: new float4(0.25f, 0.25f, 0.25f, 0.25f)))
+                            UI.GraphicsRaycaster(new(blockingObjects: UI.BlockingObjects.All))
                         ),
-                        children: info.IndexedMap(&ViewText) +
-                        new Obj("Button",
-                            components: new(
-                                UI.Image(new(color: new(0.25f, 0.5f, 0.4f, 1))),
-                                UI.Button<Msg>(new(onClick: &OnButtonClick)),
-                                UI.HorizontalLayoutGroup(new(
-                                    childAlignment: UI.TextAnchor.MiddleCenter,
-                                    childControl: true,
-                                    padding: 16
-                                ))
+                        children: new(
+                            new Obj("Image",
+                                components: new(
+                                    UI.RectTransform(new(0.5f, .95f), new(0.5f, .95f), 0, 0, new(0.5f, 1)),
+                                    UI.Image(new(color: Colors.White, spriteAddress: (S)"Assets/Data/UI/BF_logo.png")),
+                                    UI.ContentSizeFitter(new(UI.FitMode.PreferredSize, UI.FitMode.PreferredSize))
+                                )
                             ),
-                            children: new(
-                                new Obj("Text",
-                                    components: new(
-                                        UI.Text(new(
-                                            color: Colors.White,
-                                            text: (S)"Start",
-                                            fontSize: 64,
-                                            fontAddress: (S)"Assets/Data/Font/AdLibRg.ttf"
-                                        ))
+                            new Obj("Button",
+                                objRef: _buttonRef,
+                                components: new(
+                                    UI.RectTransform(new(0.5f, .05f), new(0.5f, .05f), 0, 0, new(0.5f, 0)),
+                                    UI.Image(new(color: Colors.White, spriteAddress: (S)"Assets/Data/UI/start_btn.png")),
+                                    UI.ContentSizeFitter(new(UI.FitMode.PreferredSize, UI.FitMode.PreferredSize)),
+                                    UI.Button<Msg>(new(
+                                        onClick: &OnButtonClick,
+                                        transition: UI.Transition.ColorTint,
+                                        colors: new(
+                                            new(0.85f, 0.85f, 0.85f, 1),
+                                            Colors.White,
+                                            new(0.5f, 0.5f, 0.5f, 1),
+                                            Colors.White, Colors.White
+                                        ),
+                                        targetGraphic: _buttonRef
+                                    )),
+                                    UI.HorizontalLayoutGroup(new(
+                                        childAlignment: UI.TextAnchor.MiddleCenter,
+                                        childControl: true,
+                                        padding: 16
+                                    ))
+                                ),
+                                children: new(
+                                    new Obj("Text",
+                                        components: new(
+                                            UI.Text(new(
+                                                color: Colors.White,
+                                                text: (S)"Start\nBattle",
+                                                fontSize: 64,
+                                                fontAddress: (S)"Assets/Data/Font/AdLibRg.ttf"
+                                            ))
+                                        )
                                     )
                                 )
                             )

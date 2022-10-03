@@ -8,9 +8,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
+using Screen = TenSecCastle.Model.Screen;
 
 namespace TenSecCastle.View {
-    public unsafe class UIView :MonoBehaviour,IDataDrivenComponent<PlayerUIViewData> {
+    public unsafe class UIView : MonoBehaviour, IDataDrivenComponent<PlayerUIViewData> {
         [Serializable]
         public struct SlotInfo {
             public SlotKind Id;
@@ -31,13 +32,15 @@ namespace TenSecCastle.View {
         void Awake() {
             _itemsDescription = new ItemsInfo[14];
             ulong index = 0;
-            
-            _infoWindowCloseButton.onClick.AddListener(()=>
-            {
-                //todo тут юзер ансилектится
-            });
+
+            _infoWindowCloseButton.onClick.AddListener(
+                () => { Messenger.PostMessage(new Msg(Screen.Game) { GameMsg = new GameMsg(MsgKind.UnitClicked) }); }
+            );
+
+            //restart:
+            //Messenger.PostMessage(new Msg(Screen.Game) { GameMsg = new GameMsg(MsgKind.Restart) });
         }
-        
+
         [SerializeField] private SlotInfo[] _playerSlots;
         [SerializeField] private TextMeshProUGUI _moneyText;
         [SerializeField] private TextMeshProUGUI _spawnText;
@@ -46,22 +49,22 @@ namespace TenSecCastle.View {
         [SerializeField] private Image _enemyHPFillImage;
         [SerializeField] private GameObject _infoWindow;
         [SerializeField] private Button _infoWindowCloseButton;
-        
+
         public IMessenger Messenger { get; set; }
         private delegate*<SlotKind, Msg> _listener;
-        
+
         public void Sync(PlayerUIViewData model) {
             BindButtons(model);
             SetIcons(model);
 
             _moneyText.text = model.Coins.ToString();
 
-            _spawnText.text = ((int)model.TimeToSpawn+1).ToString();
+            _spawnText.text = ((int)model.TimeToSpawn + 1).ToString();
 
             _spawnUnitFillImage.fillAmount = 1 - model.TimeToSpawn / model.MaxTimeToSpawn;
 
             _playerHPFillImage.fillAmount = model.CastleHitPoints / 10f;
-            
+
             _enemyHPFillImage.fillAmount = model.EnemyCastleHitPoints / 10f;
 
             if (model.SelectedUnitSlots.Test(out var window)) {

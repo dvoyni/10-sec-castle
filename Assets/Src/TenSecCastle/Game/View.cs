@@ -29,7 +29,6 @@ namespace TenSecCastle.Game {
         private static L<Obj> ViewUnits(GameModel model) {
             return model.Units.Map(Cf.New<Unit, GameModel, Obj>(&ViewUnit, model));
         }
-        
 
         private static Obj ViewUnit(Unit unit, GameModel* model) {
             var cellSize = 1.5f;
@@ -58,29 +57,28 @@ namespace TenSecCastle.Game {
         }
 
         private static Obj ViewPlayerUI(GameModel model) {
-           
             static bool PlayerWithId(Player player, ulong* winnerId) => player.Id == *winnerId;
             static bool UnitIsSelected(Unit unit, ulong* id) => unit.Id == *id;
-            
+
             static Msg OnSlotClick(SlotKind slotKind) => Config.ToMsg(new GameMsg(MsgKind.SlotClicked) {
-                Slot = slotKind
+                    Slot = slotKind
             });
 
             var isPlayerWin = Maybe<bool>.Nothing;
             var player = Maybe<Player>.Nothing;
             var AI = Maybe<Player>.Nothing;
             var selectedUnitSlots = Maybe<L<ulong>>.Nothing;
-            
+
             if (model.Winner.Test(out var winnerId)) {
                 if (model.Players.First(Cf.New<Player, ulong, bool>(&PlayerWithId, winnerId)).Test(out var playerWin))
-                    isPlayerWin = Maybe<bool>.Just(playerWin.Kind==PlayerKind.Human);
+                    isPlayerWin = Maybe<bool>.Just(playerWin.Kind == PlayerKind.Human);
             }
-            
-            if(model.Players.First(&Utils.PlayerIsHuman).Test(out var playerValue)) {
+
+            if (model.Players.First(&Utils.PlayerIsHuman).Test(out var playerValue)) {
                 player = Maybe<Player>.Just(playerValue);
             }
-            
-            if(model.Players.First(&Utils.PlayerIsAI).Test(out var AIvalue)) {
+
+            if (model.Players.First(&Utils.PlayerIsAI).Test(out var AIvalue)) {
                 AI = Maybe<Player>.Just(AIvalue);
             }
 
@@ -97,15 +95,17 @@ namespace TenSecCastle.Game {
             return new Obj($"PlayerUI",
                 components: new(
                     Prefab.WithData("Assets/Prefabs/PlayerUI.prefab", new PlayerUIViewData {
-                        PlayerWon = isPlayerWin,
-                        PlayerSlots = player.ValueOrDefault.Slots,
-                        CastleHitPoints = player.ValueOrDefault.CastleHitPoints,
-                        Coins = player.ValueOrDefault.Coins,
-                        SelectedUnitSlots = selectedUnitSlots,
-                        EnemyCastleHitPoints = AI.ValueOrDefault.CastleHitPoints,
-                        TimeToSpawn = model.Timeout,
-                        MaxTimeToSpawn = model.Interval,
-                        OnSlotClick = &OnSlotClick
+                            PlayerWon = isPlayerWin,
+                            PlayerSlots = player.ValueOrDefault.Slots,
+                            CastleHitPoints = player.ValueOrDefault.CastleHitPoints,
+                            Coins = player.ValueOrDefault.Coins,
+                            SelectedUnitSlots = selectedUnitSlots,
+                            EnemyCastleHitPoints = AI.ValueOrDefault.CastleHitPoints,
+                            TimeToSpawn = model.Timeout,
+                            MaxTimeToSpawn = model.Interval,
+                            OnSlotClick = &OnSlotClick,
+                            HideRerollTooltop = model.HideRerollTooltip,
+                            HideUnitTooltip = model.HideUnitTooltip,
                     })
                 ));
         }

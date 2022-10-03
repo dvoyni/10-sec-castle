@@ -3,7 +3,6 @@ using Rondo.Core.Lib.Containers;
 
 namespace TenSecCastle.Model {
     public unsafe struct PlayerUIViewData : IEquatable<PlayerUIViewData> {
-        
         public L<Slot> PlayerSlots;
         public Maybe<L<ulong>> SelectedUnitSlots;
         public int CastleHitPoints;
@@ -13,11 +12,11 @@ namespace TenSecCastle.Model {
         public float MaxTimeToSpawn;
         public Maybe<bool> PlayerWon;
         public delegate*<SlotKind, Msg> OnSlotClick;
-
+        public bool HideRerollTooltop;
+        public bool HideUnitTooltip;
 
         public bool Equals(PlayerUIViewData other) {
-            return PlayerSlots.Equals(other.PlayerSlots) && SelectedUnitSlots.Equals(other.SelectedUnitSlots) && CastleHitPoints == other.CastleHitPoints && Coins == other.Coins && EnemyCastleHitPoints == other.EnemyCastleHitPoints && TimeToSpawn.Equals(other.TimeToSpawn) && MaxTimeToSpawn.Equals(other.MaxTimeToSpawn) && PlayerWon.Equals(other.PlayerWon);
+            return PlayerSlots.Equals(other.PlayerSlots) && SelectedUnitSlots.Equals(other.SelectedUnitSlots) && CastleHitPoints == other.CastleHitPoints && Coins == other.Coins && EnemyCastleHitPoints == other.EnemyCastleHitPoints && TimeToSpawn.Equals(other.TimeToSpawn) && MaxTimeToSpawn.Equals(other.MaxTimeToSpawn) && PlayerWon.Equals(other.PlayerWon) && HideRerollTooltop == other.HideRerollTooltop && HideUnitTooltip == other.HideUnitTooltip;
         }
-       
     }
 }

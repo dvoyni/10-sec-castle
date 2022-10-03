@@ -21,6 +21,8 @@ namespace TenSecCastle.Model {
         public ulong LastUnitId;
         public Maybe<ulong> Winner;
         public Maybe<ulong> SelectedUnitID;
+        public bool HideRerollTooltip;
+        public bool HideUnitTooltip;
     }
 
     public struct Player {

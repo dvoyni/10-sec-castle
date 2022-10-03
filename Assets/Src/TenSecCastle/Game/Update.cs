@@ -15,7 +15,10 @@ namespace TenSecCastle.Game {
                 case MsgKind.Restart:
                     return (Utils.NewModel, new());
                 case MsgKind.UnitClicked:
-                    return (new GameModel(model) { SelectedUnitID = gameMsg.Id }, new());
+                    return (new GameModel(model) {
+                            SelectedUnitID = gameMsg.Id,
+                            HideUnitTooltip = model.HideUnitTooltip || !gameMsg.Id.Test(out _)
+                    }, new());
             }
             throw new NotImplementedException("Message is not handled");
         }
@@ -24,6 +27,8 @@ namespace TenSecCastle.Game {
             static bool SlotOfKind(Slot slot, SlotKind* kind) {
                 return slot.Item.SlotKind == *kind;
             }
+
+            model.HideRerollTooltip = true;
 
             if (
                 model.Players.FindIndex(&Utils.PlayerIsHuman).Test(out var playerIndex)

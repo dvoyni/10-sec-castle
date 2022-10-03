@@ -93,6 +93,18 @@ MonoBehaviour:
     m_Address: Assets/Data/Icons/14.png
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 19a5bc44b33648742b64f3360bfef6bf
+    m_Address: Assets/Prefabs/Environment_menu.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 008e5ce077708cd49879ef47f40f0fe9
+    m_Address: Assets/Data/UI/start_btn.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8d6f37c411fb3154488ba25070b51000
+    m_Address: Assets/Data/UI/BF_logo.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3df0c76146cb86c48ab9117db7940a19, type: 2}
   m_SchemaSet:
