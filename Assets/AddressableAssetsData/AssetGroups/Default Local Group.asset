@@ -89,6 +89,10 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Icons/TimerSprite.png
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: e8dd5ddb8e7f1e24791c9de76f3b4982
+    m_Address: Assets/Prefabs/PlayerUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3df0c76146cb86c48ab9117db7940a19, type: 2}
   m_SchemaSet:
