@@ -117,7 +117,7 @@ namespace TenSecCastle.Game {
                                     target.HitPoints -= CalculateDamage(unit, target);
                                     model.Units = model.Units.Replace(targetIndex, target);
 
-                                    if (target.HitPoints == 0) {
+                                    if (target.HitPoints <= 0) {
                                         if (
                                             model.Players.FindIndex(PlayerIdEq(unit.Owner)).Test(out var playerIndex)
                                             && model.Players.At(playerIndex).Test(out var player)
