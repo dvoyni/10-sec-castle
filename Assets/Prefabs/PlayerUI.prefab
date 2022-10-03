@@ -2532,7 +2532,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.75
+  m_fontSize: 38.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4789,7 +4789,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Click on item to reroll it for
+  m_text: Click an item to reroll it for
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b191816d7d505d34da5f8a705c628830, type: 2}
   m_sharedMaterial: {fileID: 7999897288736859540, guid: b191816d7d505d34da5f8a705c628830, type: 2}
@@ -7239,12 +7239,12 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 57
+    m_Bottom: 33
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 406.54364, y: 154.07317}
-  m_Spacing: {x: 0, y: 20.096498}
+  m_CellSize: {x: 406.54364, y: 157.52815}
+  m_Spacing: {x: 0, y: 20.547152}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!114 &2857298210881396037
