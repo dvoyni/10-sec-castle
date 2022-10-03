@@ -7,8 +7,8 @@ using UnityEngine;
 namespace TenSecCastle.View {
     public class PlayerUIView :MonoBehaviour,IDataDrivenComponent<PlayerUIViewData> {
         public IMessenger Messenger { get; set; }
-        public void Sync(PlayerUIViewData componentModel) {
-            
+        public void Sync(PlayerUIViewData model) {
+            //model
         }
     }
 }

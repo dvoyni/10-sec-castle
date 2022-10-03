@@ -16,7 +16,23 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 1f3715448374f724c96d448bf2a11ba5
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 391dd507fd0f5c14b9801b500c154792
+    m_Address: Assets/Data/Font/AdLibRg.ttf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: bb1335483494e7f45a5e80af070f2a61
+    m_Address: Assets/Prefabs/Environment.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e8dd5ddb8e7f1e24791c9de76f3b4982
+    m_Address: Assets/Prefabs/PlayerUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5a0d8d02c81cc5946b5f4706c056c6c4
+    m_Address: Assets/Prefabs/Unit.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3df0c76146cb86c48ab9117db7940a19, type: 2}
   m_SchemaSet:
