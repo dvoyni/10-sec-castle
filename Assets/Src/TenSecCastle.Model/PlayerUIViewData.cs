@@ -5,7 +5,7 @@ namespace TenSecCastle.Model {
     public struct PlayerUIViewData : IEquatable<PlayerUIViewData> {
         
         public L<Slot> PlayerSlots;
-        public Maybe<L<Slot>> SelectedUnitSlot;
+        public Maybe<L<ulong>> SelectedUnitSlots;
         public int CastleHitPoints;
         public int Coins;
         public int EnemyCastleHitPoints;
@@ -15,7 +15,7 @@ namespace TenSecCastle.Model {
 
 
         public bool Equals(PlayerUIViewData other) {
-            return PlayerSlots.Equals(other.PlayerSlots) && SelectedUnitSlot.Equals(other.SelectedUnitSlot) && CastleHitPoints == other.CastleHitPoints && Coins == other.Coins && EnemyCastleHitPoints == other.EnemyCastleHitPoints && TimeToSpawn.Equals(other.TimeToSpawn) && MaxTimeToSpawn.Equals(other.MaxTimeToSpawn) && PlayerWon.Equals(other.PlayerWon);
+            return PlayerSlots.Equals(other.PlayerSlots) && SelectedUnitSlots.Equals(other.SelectedUnitSlots) && CastleHitPoints == other.CastleHitPoints && Coins == other.Coins && EnemyCastleHitPoints == other.EnemyCastleHitPoints && TimeToSpawn.Equals(other.TimeToSpawn) && MaxTimeToSpawn.Equals(other.MaxTimeToSpawn) && PlayerWon.Equals(other.PlayerWon);
         }
        
     }
