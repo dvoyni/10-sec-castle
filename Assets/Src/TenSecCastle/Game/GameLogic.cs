@@ -284,7 +284,7 @@ namespace TenSecCastle.Game {
                 var n = r.NextInt(player.Slots.Length());
                 if (player.Slots.At(n).Test(out var slot)) {
                     var items = Utils.ShuffleItems(model.Items);
-                    if (Utils.FirstItemWithSlot(items, SlotKind.Weapon).Test(out var item)) {
+                    if (Utils.FirstItemWithSlot(items, slot.Item.SlotKind).Test(out var item)) {
                         slot.Item = item;
                         player.Slots = player.Slots.Replace(n, slot);
                         model.Players = model.Players.Replace(idx, player);

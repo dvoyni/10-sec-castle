@@ -14,7 +14,9 @@ namespace TenSecCastle.View {
             public Image Img;
             public Button Btn;
         }
+        
         [SerializeField] private SlotInfo[] _playerSlots;
+        
         public IMessenger Messenger { get; set; }
         private delegate*<SlotKind, Msg> _listener;
         
