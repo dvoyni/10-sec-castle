@@ -4,7 +4,6 @@ using Rondo.Unity;
 using Rondo.Unity.Components;
 using Rondo.Unity.Utils;
 using TenSecCastle.Model;
-using TenSecCastle.View;
 using Unity.Mathematics;
 
 namespace TenSecCastle.Game {
@@ -62,6 +61,10 @@ namespace TenSecCastle.Game {
            
             static bool PlayerWithId(Player player, ulong* winnerId) => player.Id == *winnerId;
             static bool UnitIsSelected(Unit unit, ulong* id) => unit.Id == *id;
+            
+            static Msg OnSlotClick(SlotKind slotKind) => Config.ToMsg(new GameMsg(MsgKind.SlotClicked) {
+                Slot = slotKind
+            });
 
             var isPlayerWin = Maybe<bool>.Nothing;
             var player = Maybe<Player>.Nothing;
@@ -101,7 +104,8 @@ namespace TenSecCastle.Game {
                         SelectedUnitSlots = selectedUnitSlots,
                         EnemyCastleHitPoints = AI.ValueOrDefault.CastleHitPoints,
                         TimeToSpawn = model.Timeout,
-                        MaxTimeToSpawn = model.Interval
+                        MaxTimeToSpawn = model.Interval,
+                        OnSlotClick = &OnSlotClick
                     })
                 ));
         }

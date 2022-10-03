@@ -18,8 +18,9 @@ namespace TenSecCastle.View {
         private struct ArmorSetBinding {
             public ulong Id;
             public GameObject[] Obj;
-            
         }
+        
+        [SerializeField] private GameObject _arrow;
         
         [SerializeField] private Animator _playerAnimator;
         [SerializeField] private ItemBinding[] Weapons;

@@ -1,7 +1,6 @@
 ﻿using System;
-using TenSecCastle.Model;
 
-namespace TenSecCastle.View {
+namespace TenSecCastle.Model {
     public struct UnitViewData : IEquatable<UnitViewData> {
         public Unit Unit;
         public bool SelectedUnitId;

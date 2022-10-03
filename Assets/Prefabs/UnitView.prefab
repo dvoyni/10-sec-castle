@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a59ce218791085647b57241a87f85e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _arrow: {fileID: 2064425493129779458}
   _playerAnimator: {fileID: 2253639237635856692}
   Weapons:
   - Id: 1
@@ -257,6 +258,11 @@ GameObject:
 --- !u!1 &1325668834567761336 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 896489882159379626, guid: 1c4f474c5a4b69b4ca49208a7bd74cb9, type: 3}
+  m_PrefabInstance: {fileID: 2167709182862612754}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2064425493129779458 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 194516835916447760, guid: 1c4f474c5a4b69b4ca49208a7bd74cb9, type: 3}
   m_PrefabInstance: {fileID: 2167709182862612754}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2163234197599184018 stripped

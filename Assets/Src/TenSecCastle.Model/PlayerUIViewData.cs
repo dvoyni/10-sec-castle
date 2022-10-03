@@ -2,7 +2,7 @@
 using Rondo.Core.Lib.Containers;
 
 namespace TenSecCastle.Model {
-    public struct PlayerUIViewData : IEquatable<PlayerUIViewData> {
+    public unsafe struct PlayerUIViewData : IEquatable<PlayerUIViewData> {
         
         public L<Slot> PlayerSlots;
         public Maybe<L<ulong>> SelectedUnitSlots;
@@ -12,6 +12,7 @@ namespace TenSecCastle.Model {
         public float TimeToSpawn;
         public float MaxTimeToSpawn;
         public Maybe<bool> PlayerWon;
+        public delegate*<SlotKind, Msg> OnSlotClick;
 
 
         public bool Equals(PlayerUIViewData other) {

@@ -3,14 +3,11 @@ using Rondo.Core.Lib.Platform;
 using Rondo.Unity;
 using Rondo.Unity.Components;
 using Rondo.Unity.Utils;
+using TenSecCastle.Model;
 using Unity.Mathematics;
 
 namespace TenSecCastle.Splash {
     public struct SplashModel { }
-
-    public struct SplashMsg {
-        public bool Proceed;
-    }
 
     public static unsafe class SplashScreen {
         public static (SplashModel, L<Cmd<SplashMsg>>) Init() {

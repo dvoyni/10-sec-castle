@@ -11,9 +11,4 @@ namespace TenSecCastle {
         public GameModel GameModel;
         public SplashModel SplashModel;
     }
-
-    public enum Screen {
-        Splash,
-        Game,
-    }
 }
