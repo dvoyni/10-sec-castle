@@ -5,6 +5,7 @@ using Rondo.Core.Lib.Containers;
 using Rondo.Core.Lib.Platform;
 using TenSecCastle.Model;
 using Unity.Mathematics;
+using Random = Unity.Mathematics.Random;
 
 namespace TenSecCastle.Game {
     public static unsafe class GameLogic {
@@ -276,7 +277,20 @@ namespace TenSecCastle.Game {
         }
 
         private static GameModel AI(GameModel model) {
-            //TODO:
+            static bool PlayerIsAi(Player player) => player.Kind == PlayerKind.AI;
+
+            if (model.Players.FindIndex(&PlayerIsAi).Test(out var idx) && model.Players.At(idx).Test(out var player)) {
+                var r = new Random((uint)DateTime.Now.ToFileTime());
+                var n = r.NextInt(player.Slots.Length());
+                if (player.Slots.At(n).Test(out var slot)) {
+                    var items = Utils.ShuffleItems(model.Items);
+                    if (Utils.FirstItemWithSlot(items, SlotKind.Weapon).Test(out var item)) {
+                        slot.Item = item;
+                        player.Slots = player.Slots.Replace(n, slot);
+                        model.Players = model.Players.Replace(idx, player);
+                    }
+                }
+            }
             return model;
         }
 
