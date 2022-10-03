@@ -7,7 +7,9 @@ using Rondo.Core.Lib.Platform;
 using Rondo.Core.Memory;
 using Rondo.Unity;
 using Rondo.Unity.Utils;
+using TenSecCastle.Game;
 using TenSecCastle.Model;
+using TenSecCastle.Splash;
 
 namespace TenSecCastle {
     public static unsafe class Config {
@@ -21,13 +23,18 @@ namespace TenSecCastle {
         };
 
         private static (AppModel, L<Cmd<Msg>>) Init() {
-            return ToModelCmd(Game.Init.InitGame());
+            return ToModelCmd(SplashScreen.Init());
         }
 
         private static (AppModel, L<Cmd<Msg>>) Update(Msg msg, AppModel model) {
             switch (msg.Screen) {
                 case Screen.Game:
                     return ToModelCmd(Game.Update.UpdateGame(msg.GameMsg, model.GameModel));
+                case Screen.Splash:
+                    if (msg.SplashMsg.Proceed) {
+                        return ToModelCmd(Game.Init.InitGame());
+                    }
+                    return ToModelCmd(SplashScreen.Update(msg.SplashMsg, model.SplashModel));
             }
 
             return (model, new());
@@ -37,6 +44,8 @@ namespace TenSecCastle {
             switch (model.Screen) {
                 case Screen.Game:
                     return Game.Subscribe.SubscribeGame(model.GameModel).Map(&ToMsg);
+                case Screen.Splash:
+                    return SplashScreen.Subscribe(model.SplashModel).Map(&ToMsg);
             }
 
             return new();
@@ -46,6 +55,8 @@ namespace TenSecCastle {
             switch (model.Screen) {
                 case Screen.Game:
                     return Game.View.ViewGame(model.GameModel);
+                case Screen.Splash:
+                    return SplashScreen.View(model.SplashModel);
             }
 
             return new Obj();
@@ -63,7 +74,7 @@ namespace TenSecCastle {
             }
         }
 
-        private static (AppModel, L<Cmd<Msg>>) ToModelCmd((GameModel model, L<Cmd<Game.Msg>> cmds) t) {
+        private static (AppModel, L<Cmd<Msg>>) ToModelCmd((GameModel model, L<Cmd<GameMsg>> cmds) t) {
             return (ToModel(t.model), t.cmds.Map(&ToMsg));
         }
 
@@ -71,8 +82,20 @@ namespace TenSecCastle {
             return new AppModel(Screen.Game) { GameModel = model };
         }
 
-        public static Msg ToMsg(Game.Msg msg) {
-            return new Msg(Screen.Game) { GameMsg = msg };
+        public static Msg ToMsg(GameMsg gameMsg) {
+            return new Msg(Screen.Game) { GameMsg = gameMsg };
+        }
+
+        private static (AppModel, L<Cmd<Msg>>) ToModelCmd((SplashModel model, L<Cmd<SplashMsg>> cmds) t) {
+            return (ToModel(t.model), t.cmds.Map(&ToMsg));
+        }
+
+        private static AppModel ToModel(SplashModel model) {
+            return new AppModel(Screen.Splash) { SplashModel = model };
+        }
+
+        public static Msg ToMsg(SplashMsg msg) {
+            return new Msg(Screen.Splash) { SplashMsg = msg };
         }
     }
 }

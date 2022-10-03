@@ -65,6 +65,30 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Icons/8.png
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: f7fe1446dfc0a214d891ad637f815709
+    m_Address: Assets/Data/Alkalami-Regular.ttf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8a861c9215c6edc4b9b4bedbfd2df06f
+    m_Address: Assets/Prefabs/Icons/11.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 09067e251b9e0db41b5f4f65fe28ef22
+    m_Address: Assets/Prefabs/Icons/12.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 03662ed96ffc9f5499e5681ca97348d1
+    m_Address: Assets/Prefabs/Icons/13.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3b02b836059358c4ca972a40fa744e21
+    m_Address: Assets/Prefabs/Icons/14.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: cfc2a5bf9af284942947341b2b2640ee
+    m_Address: Assets/Prefabs/Icons/TimerSprite.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3df0c76146cb86c48ab9117db7940a19, type: 2}
   m_SchemaSet:

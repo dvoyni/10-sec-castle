@@ -4,6 +4,9 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Src/TenSecCastle.App/App.unity
+    guid: a1a5c5c47c8a3264581acd600795b6a1
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2a59044337d8aeb4f8a5c54ef524470c, type: 2}
