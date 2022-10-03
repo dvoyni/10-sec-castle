@@ -163,7 +163,6 @@ namespace TenSecCastle.View {
                     _playerSlots[i].Btn.onClick.AddListener(() => {
                         Messenger.PostMessage(model.OnSlotClick(slot));
                         if (coins > 0) {
-                            Debug.Log(coins);
                             _playerSlots[j].Animator.Play("Swap");
                         }
                             
