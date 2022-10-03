@@ -26,7 +26,7 @@ namespace TenSecCastle.Game {
                         new GameMsg(MsgKind.UnitClicked) { Id = Maybe<ulong>.Just(key.GetValue<ulong>()) }
                     );
                 }
-                Maybe<GameMsg>.Just(new GameMsg(MsgKind.UnitClicked));
+                return Maybe<GameMsg>.Just(new GameMsg(MsgKind.UnitClicked));
             }
             return Maybe<GameMsg>.Nothing;
         }
