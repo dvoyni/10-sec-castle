@@ -10,7 +10,7 @@ namespace TenSecCastle.Game {
         public static bool PlayerIsHuman(Player player) {
             return player.Kind == PlayerKind.Human;
         }
-        
+
         public static bool PlayerIsAI(Player player) {
             return player.Kind == PlayerKind.AI;
         }

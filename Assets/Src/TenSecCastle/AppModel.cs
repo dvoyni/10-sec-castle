@@ -1,5 +1,4 @@
 using TenSecCastle.Model;
-using TenSecCastle.Splash;
 
 namespace TenSecCastle {
     public struct AppModel {

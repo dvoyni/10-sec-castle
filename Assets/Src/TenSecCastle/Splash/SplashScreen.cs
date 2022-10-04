@@ -7,8 +7,6 @@ using TenSecCastle.Model;
 using Unity.Mathematics;
 
 namespace TenSecCastle.Splash {
-    public struct SplashModel { }
-
     public static unsafe class SplashScreen {
         public static (SplashModel, L<Cmd<SplashMsg>>) Init() {
             return new();

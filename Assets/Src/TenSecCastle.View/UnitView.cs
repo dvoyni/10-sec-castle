@@ -4,7 +4,6 @@ using Rondo.Core;
 using Rondo.Unity.Components;
 using TenSecCastle.Model;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace TenSecCastle.View {
     public class UnitView : MonoBehaviour, IDataDrivenComponent<UnitViewData> {
@@ -13,15 +12,15 @@ namespace TenSecCastle.View {
             public ulong Id;
             public GameObject Obj;
         }
-        
+
         [Serializable]
         private struct ArmorSetBinding {
             public ulong Id;
             public GameObject[] Obj;
         }
-        
+
         [SerializeField] private GameObject _arrow;
-        
+
         [SerializeField] private Animator _playerAnimator;
         [SerializeField] private ItemBinding[] Weapons;
         [SerializeField] private ItemBinding[] Auras;
@@ -31,7 +30,7 @@ namespace TenSecCastle.View {
         private float _currentProgress;
 
         private UnitState _currentState;
-        private float _currentUnitHP;
+        private float _currentUnitHp;
         private float _currentAnimationProgress;
 
         private float _deadAnimationTime;
@@ -39,10 +38,17 @@ namespace TenSecCastle.View {
         private ulong _currentArmorId;
         private ulong _currentAuraId;
 
-        public IMessenger Messenger { private get; set; }
+        public IMessenger Messenger { get; set; }
 
         private void Awake() {
-            Init();
+            var animController = _playerAnimator.runtimeAnimatorController;
+            var animaName = GetAnimationClipName(UnitState.Dieing);
+            var clip = animController.animationClips.First(a => a.name == animaName);
+            _deadAnimationTime = clip.length;
+
+            if (clip == null) {
+                throw new Exception("Can't find animation");
+            }
         }
 
         public void Sync(UnitViewData unitViewData) {
@@ -55,7 +61,6 @@ namespace TenSecCastle.View {
             UpdateArmor(unit);
             UpdateAuras(unit);
             _arrow.SetActive(unitViewData.SelectedUnitId);
-            
         }
 
         private void UpdateAuras(Unit unit) {
@@ -104,24 +109,13 @@ namespace TenSecCastle.View {
         }
 
         private void UpdateAnimationState(Unit unit) {
-            
             if (unit.State != _currentState) {
                 _currentState = unit.State;
-                _currentAnimationClip = GetAnimationClipName(_currentState,unit.WeaponId);
+                _currentAnimationClip = GetAnimationClipName(_currentState, unit.WeaponId);
             }
         }
 
-        private void Init() {
-            var animController = _playerAnimator.runtimeAnimatorController;
-            var animaName = GetAnimationClipName(UnitState.Dieing);
-            var clip = animController.animationClips.First(a => a.name == animaName);
-            _deadAnimationTime = clip.length;
-
-            if (clip == null)
-                throw new Exception("Can't find animation");
-        }
-
-        private string GetAnimationClipName(UnitState unitState, ulong? weaponId=null) {
+        private string GetAnimationClipName(UnitState unitState, ulong? weaponId = null) {
             switch (unitState) {
                 case UnitState.Moving:
                     return "Male_Sword_Walk";
@@ -129,9 +123,9 @@ namespace TenSecCastle.View {
                     return "Male Sword Stance";
                 case UnitState.Attacking:
                     return weaponId switch {
-                        1 => $"Male Attack 1",
-                        2 => $"shotgun_fire",
-                        _ => $"Male Attack 2"
+                            1 => "Male Attack 1",
+                            2 => "shotgun_fire",
+                            _ => "Male Attack 2",
                     };
                 case UnitState.Dieing:
                     return "Male Sword Die";

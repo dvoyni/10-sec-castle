@@ -2,7 +2,6 @@ using Rondo.Core.Lib;
 using Rondo.Core.Lib.Containers;
 using Rondo.Unity;
 using Rondo.Unity.Components;
-using Rondo.Unity.Utils;
 using TenSecCastle.Model;
 using Unity.Mathematics;
 
@@ -60,51 +59,50 @@ namespace TenSecCastle.Game {
             static bool PlayerWithId(Player player, ulong* winnerId) => player.Id == *winnerId;
             static bool UnitIsSelected(Unit unit, ulong* id) => unit.Id == *id;
 
-            static Msg OnSlotClick(SlotKind slotKind) => Config.ToMsg(new GameMsg(MsgKind.SlotClicked) {
-                    Slot = slotKind
-            });
-
-            var isPlayerWin = Maybe<bool>.Nothing;
-            var player = Maybe<Player>.Nothing;
-            var AI = Maybe<Player>.Nothing;
-            var selectedUnitSlots = Maybe<L<ulong>>.Nothing;
-
-            if (model.Winner.Test(out var winnerId)) {
-                if (model.Players.First(Cf.New<Player, ulong, bool>(&PlayerWithId, winnerId)).Test(out var playerWin))
-                    isPlayerWin = Maybe<bool>.Just(playerWin.Kind == PlayerKind.Human);
+            static Msg OnSlotClick(SlotKind slotKind) {
+                return Config.ToMsg(new GameMsg(MsgKind.SlotClicked) { Slot = slotKind });
             }
 
-            if (model.Players.First(&Utils.PlayerIsHuman).Test(out var playerValue)) {
-                player = Maybe<Player>.Just(playerValue);
+            var data = new PlayerUIViewData {
+                    TimeToSpawn = model.Timeout,
+                    MaxTimeToSpawn = model.Interval,
+                    OnSlotClick = &OnSlotClick,
+                    HideRerollTooltop = model.HideRerollTooltip,
+                    HideUnitTooltip = model.HideUnitTooltip,
+            };
+
+            if (
+                model.Winner.Test(out var winnerId)
+                && model.Players.First(Cf.New<Player, ulong, bool>(&PlayerWithId, winnerId)).Test(out var playerWin)
+            ) {
+                data.PlayerWon = Maybe<bool>.Just(playerWin.Kind == PlayerKind.Human);
             }
 
-            if (model.Players.First(&Utils.PlayerIsAI).Test(out var AIvalue)) {
-                AI = Maybe<Player>.Just(AIvalue);
+            if (model.Players.First(&Utils.PlayerIsHuman).Test(out var player)) {
+                data.PlayerSlots = player.Slots;
+                data.Coins = player.Coins;
+                data.CastleHitPoints = player.CastleHitPoints;
             }
 
-            if (model.SelectedUnitID.Test(out var userId)) {
-                if (model.Units.First(Cf.New<Unit, ulong, bool>(&UnitIsSelected, userId)).Test(out var unitValue)) {
-                    var items = new L<ulong>(unitValue.WeaponId, unitValue.ArmorId, unitValue.JewelryId);
-                    selectedUnitSlots = Maybe<L<ulong>>.Just(items);
-                }
+            if (model.Players.First(&Utils.PlayerIsAI).Test(out var ai)) {
+                data.EnemyCastleHitPoints = ai.CastleHitPoints;
             }
 
-            return new Obj($"PlayerUI",
-                components: new(
-                    Prefab.WithData("Assets/Prefabs/PlayerUI.prefab", new PlayerUIViewData {
-                            PlayerWon = isPlayerWin,
-                            PlayerSlots = player.ValueOrDefault.Slots,
-                            CastleHitPoints = player.ValueOrDefault.CastleHitPoints,
-                            Coins = player.ValueOrDefault.Coins,
-                            SelectedUnitSlots = selectedUnitSlots,
-                            EnemyCastleHitPoints = AI.ValueOrDefault.CastleHitPoints,
-                            TimeToSpawn = model.Timeout,
-                            MaxTimeToSpawn = model.Interval,
-                            OnSlotClick = &OnSlotClick,
-                            HideRerollTooltop = model.HideRerollTooltip,
-                            HideUnitTooltip = model.HideUnitTooltip,
-                    })
-                ));
+            if (
+                model.SelectedUnitID.Test(out var userId)
+                && model.Units.First(Cf.New<Unit, ulong, bool>(&UnitIsSelected, userId)).Test(out var unitValue)
+            ) {
+                data.SelectedUnitSlots = Maybe<L<ulong>>.Just(
+                    new(unitValue.WeaponId, unitValue.ArmorId, unitValue.JewelryId)
+                );
+            }
+
+            return new Obj("PlayerUI",
+                components: new
+                (
+                    Prefab.WithData("Assets/Prefabs/PlayerUI.prefab", data)
+                )
+            );
         }
     }
 }
