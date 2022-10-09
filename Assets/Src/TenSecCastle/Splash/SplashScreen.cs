@@ -8,11 +8,11 @@ using Unity.Mathematics;
 
 namespace TenSecCastle.Splash {
     public static unsafe class SplashScreen {
-        public static (SplashModel, L<Cmd<SplashMsg>>) Init() {
+        public static (SplashModel, L<Cmd>) Init() {
             return new();
         }
 
-        public static (SplashModel, L<Cmd<SplashMsg>>) Update(SplashMsg msg, SplashModel model) {
+        public static (SplashModel, L<Cmd>) Update(SplashMsg msg, SplashModel model) {
             return (new(), new());
         }
 
@@ -91,7 +91,7 @@ namespace TenSecCastle.Splash {
             );
         }
 
-        public static L<Sub<SplashMsg>> Subscribe(SplashModel model) {
+        public static L<Sub> Subscribe(SplashModel model) {
             return new();
         }
     }

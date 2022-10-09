@@ -14,18 +14,17 @@ namespace TenSecCastle {
     public static unsafe class Config {
         public static Runtime<AppModel, Msg, Obj>.Config New => new() {
                 Init = CLf.New(&Init),
-                Update = CLf.New<Msg, AppModel, (AppModel, L<Cmd<Msg>>)>(&Update),
-                Subscribe = CLf.New<AppModel, L<Sub<Msg>>>(&Subscribe),
+                Update = CLf.New<Msg, AppModel, (AppModel, L<Cmd>)>(&Update),
+                Subscribe = CLf.New<AppModel, L<Sub>>(&Subscribe),
                 View = CLf.New<AppModel, Obj>(&View),
                 Fail = Maybe<CLa<Exception, AppModel, Msg>>.Just(new CLa<Exception, AppModel, Msg>(&Fail)),
-                Reset = Maybe<CLa<AppModel>>.Just(new CLa<AppModel>(&Reset)),
         };
 
-        private static (AppModel, L<Cmd<Msg>>) Init() {
+        private static (AppModel, L<Cmd>) Init() {
             return ToModelCmd(SplashScreen.Init());
         }
 
-        private static (AppModel, L<Cmd<Msg>>) Update(Msg msg, AppModel model) {
+        private static (AppModel, L<Cmd>) Update(Msg msg, AppModel model) {
             switch (msg.Screen) {
                 case Screen.Game:
                     return ToModelCmd(Game.Update.UpdateGame(msg.GameMsg, model.GameModel));
@@ -39,12 +38,12 @@ namespace TenSecCastle {
             return (model, new());
         }
 
-        private static L<Sub<Msg>> Subscribe(AppModel model) {
+        private static L<Sub> Subscribe(AppModel model) {
             switch (model.Screen) {
                 case Screen.Game:
-                    return Game.Subscribe.SubscribeGame(model.GameModel).Map(&ToMsg);
+                    return Game.Subscribe.SubscribeGame(model.GameModel);
                 case Screen.Splash:
-                    return SplashScreen.Subscribe(model.SplashModel).Map(&ToMsg);
+                    return SplashScreen.Subscribe(model.SplashModel);
             }
 
             return new();
@@ -67,14 +66,8 @@ namespace TenSecCastle {
             );
         }
 
-        private static void Reset(AppModel dumpedModel) {
-            if (Directory.Exists(Debug.DebugDumDir)) {
-                Directory.Delete(Debug.DebugDumDir, true);
-            }
-        }
-
-        private static (AppModel, L<Cmd<Msg>>) ToModelCmd((GameModel model, L<Cmd<GameMsg>> cmds) t) {
-            return (ToModel(t.model), t.cmds.Map(&ToMsg));
+        private static (AppModel, L<Cmd>) ToModelCmd((GameModel model, L<Cmd> cmds) t) {
+            return (ToModel(t.model), t.cmds);
         }
 
         private static AppModel ToModel(GameModel model) {
@@ -85,8 +78,8 @@ namespace TenSecCastle {
             return new Msg(Screen.Game) { GameMsg = gameMsg };
         }
 
-        private static (AppModel, L<Cmd<Msg>>) ToModelCmd((SplashModel model, L<Cmd<SplashMsg>> cmds) t) {
-            return (ToModel(t.model), t.cmds.Map(&ToMsg));
+        private static (AppModel, L<Cmd>) ToModelCmd((SplashModel model, L<Cmd> cmds) t) {
+            return (ToModel(t.model), t.cmds);
         }
 
         private static AppModel ToModel(SplashModel model) {

@@ -6,7 +6,7 @@ using TenSecCastle.Model;
 
 namespace TenSecCastle.Game {
     public static unsafe class Update {
-        public static (GameModel, L<Cmd<GameMsg>>) UpdateGame(GameMsg gameMsg, GameModel model) {
+        public static (GameModel, L<Cmd>) UpdateGame(GameMsg gameMsg, GameModel model) {
             switch (gameMsg.Kind) {
                 case MsgKind.Tick:
                     return GameLogic.UpdateTick(model, gameMsg.DeltaTime);
@@ -23,7 +23,7 @@ namespace TenSecCastle.Game {
             throw new NotImplementedException("Message is not handled");
         }
 
-        private static (GameModel, L<Cmd<GameMsg>>) RerollSlot(GameModel model, SlotKind slotKind) {
+        private static (GameModel, L<Cmd>) RerollSlot(GameModel model, SlotKind slotKind) {
             static bool SlotOfKind(Slot slot, SlotKind* kind) {
                 return slot.Item.SlotKind == *kind;
             }

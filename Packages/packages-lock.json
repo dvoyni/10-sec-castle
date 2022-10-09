@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4da746832014d23c9faf6d6f49d394cd16ef12b9"
+      "hash": "155c25b8fed33b7b6eee253e240106fea168f3e0"
     },
     "com.dvoyni.rondo.unity": {
       "version": "https://github.com/dvoyni/rondo.unity.git",
@@ -17,7 +17,7 @@
         "com.unity.addressables": "1.19.19",
         "com.unity.render-pipelines.universal": "12.1.7"
       },
-      "hash": "fdfa86e7c257cfe23453e08d832da1dd320e5d46"
+      "hash": "9b412b85e9135f791a2adb8be3caa34689a03b30"
     },
     "com.unity.addressables": {
       "version": "1.19.19",
@@ -34,7 +34,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.6.6",
+      "version": "1.7.3",
       "depth": 2,
       "source": "registry",
       "dependencies": {
@@ -43,7 +43,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "1.15.18",
+      "version": "1.17.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -141,7 +141,7 @@
       "source": "builtin",
       "dependencies": {
         "com.unity.mathematics": "1.2.1",
-        "com.unity.burst": "1.5.0",
+        "com.unity.burst": "1.7.3",
         "com.unity.render-pipelines.core": "12.1.7",
         "com.unity.shadergraph": "12.1.7"
       }
@@ -161,7 +161,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.services.core": {
-      "version": "1.4.0",
+      "version": "1.4.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {

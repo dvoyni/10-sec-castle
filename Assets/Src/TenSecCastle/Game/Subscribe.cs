@@ -5,7 +5,7 @@ using TenSecCastle.Model;
 
 namespace TenSecCastle.Game {
     public static unsafe class Subscribe {
-        public static L<Sub<GameMsg>> SubscribeGame(GameModel model) {
+        public static L<Sub> SubscribeGame(GameModel model) {
             if (model.Winner.Test(out _)) {
                 return new();
             }
@@ -15,20 +15,20 @@ namespace TenSecCastle.Game {
             );
         }
 
-        private static Maybe<GameMsg> OnTick(Timer.TickData data) {
-            return Maybe<GameMsg>.Just(new GameMsg(MsgKind.Tick) { DeltaTime = data.Delta });
+        private static Maybe<Msg> OnTick(Timer.TickData data) {
+            return Maybe<Msg>.Just(Config.ToMsg(new GameMsg(MsgKind.Tick) { DeltaTime = data.Delta }));
         }
 
-        private static Maybe<GameMsg> OnPointerEvent(Input.PointerEventData data) {
+        private static Maybe<Msg> OnPointerEvent(Input.PointerEventData data) {
             if (data.Kind == Input.PointerEventKind.Down) {
                 if (data.ObjKeys.First().Test(out var key)) {
-                    return Maybe<GameMsg>.Just(
-                        new GameMsg(MsgKind.UnitClicked) { Id = Maybe<ulong>.Just(key.GetValue<ulong>()) }
+                    return Maybe<Msg>.Just(
+                        Config.ToMsg(new GameMsg(MsgKind.UnitClicked) { Id = Maybe<ulong>.Just(key.GetValue<ulong>()) })
                     );
                 }
-                return Maybe<GameMsg>.Just(new GameMsg(MsgKind.UnitClicked));
+                return Maybe<Msg>.Just(Config.ToMsg(new GameMsg(MsgKind.UnitClicked)));
             }
-            return Maybe<GameMsg>.Nothing;
+            return Maybe<Msg>.Nothing;
         }
     }
 }

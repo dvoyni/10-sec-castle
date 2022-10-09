@@ -9,7 +9,7 @@ using Random = Unity.Mathematics.Random;
 
 namespace TenSecCastle.Game {
     public static unsafe class GameLogic {
-        public static (GameModel, L<Cmd<GameMsg>>) UpdateTick(GameModel model, float dt) {
+        public static (GameModel, L<Cmd>) UpdateTick(GameModel model, float dt) {
             model = CheckGameEnd(model);
 
             if (!model.Winner.Test(out _)) {

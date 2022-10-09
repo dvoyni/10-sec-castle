@@ -4,7 +4,7 @@ using TenSecCastle.Model;
 
 namespace TenSecCastle.Game {
     public static class Init {
-        public static (GameModel, L<Cmd<GameMsg>>) InitGame() {
+        public static (GameModel, L<Cmd>) InitGame() {
             return (Utils.NewModel, new());
         }
     }
